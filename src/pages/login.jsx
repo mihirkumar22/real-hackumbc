@@ -1,56 +1,66 @@
-import { useState } from "react";
-import { auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useRef, useState } from "react"; // Add missing imports
+import AuthCard from "../components/AuthCard";
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [user, setUser] = useState(null);
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const { login } = useAuth();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      setUser(userCredential.user);
-      setError("");
+      setError('');
+      setLoading(true);
+      await login(emailRef.current.value, passwordRef.current.value);
+      navigate('/');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  if (user) {
-    return (
-      <div>
-        <h2>Welcome, {user.email}</h2>
-        <p>You are logged in!</p>
-      </div>
-    );
   }
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: "100%", padding: "10px", margin: "10px 0" }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", padding: "10px", margin: "10px 0" }}
-        />
-        <button type="submit" style={{ padding: "10px 20px", marginTop: "10px" }}>
-          Login
-        </button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="stack">
+      <AuthCard
+        title="Login"
+        footer={
+          <>
+            <p>
+              Don't have an account? <a href="/signup">Sign Up</a>
+            </p>
+            <p>
+              <a href="/forgot-password">Forgot Password?</a>
+            </p>
+          </>
+        }
+      >
+        {error && <div style={{color: 'red', marginBottom: '1rem'}}>{error}</div>}
+        <form onSubmit={handleSubmit}> {/* Add onSubmit handler */}
+          <input 
+            type="email" 
+            placeholder="Email" 
+            required 
+            ref={emailRef} /* Add ref */
+            disabled={loading}
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            required 
+            ref={passwordRef} /* Add ref */
+            disabled={loading}
+          />
+          <button type="submit" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+      </AuthCard>
     </div>
   );
 }
