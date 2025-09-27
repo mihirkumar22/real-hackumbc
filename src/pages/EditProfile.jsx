@@ -119,8 +119,6 @@ function EditProfile() {
                         </Button>
                     </Form>
                 </Card.Body>
-                <UploadResume />
- 
             </Card>
         </div>
     );

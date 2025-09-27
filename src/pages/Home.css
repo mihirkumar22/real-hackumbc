@@ -1,0 +1,21 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: auto; /* ensure vertical scrolling is allowed */
+}
+
+/* Works in Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Works in Firefox */
+* {
+  scrollbar-width: none; /* hide scrollbar */
+}
+
+/* Works in IE/Edge Legacy */
+* {
+  -ms-overflow-style: none; 
+}
