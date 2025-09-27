@@ -1,20 +1,21 @@
 import { useState } from "react";
-import { auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase"; // Adjust path as needed
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
       setError("");
     } catch (err) {
+      console.error(err);
       setError(err.message);
     }
   };
@@ -23,15 +24,15 @@ export default function Login() {
     return (
       <div>
         <h2>Welcome, {user.email}</h2>
-        <p>You are logged in!</p>
+        <p>Your account has been created!</p>
       </div>
     );
   }
 
   return (
     <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+      <h2>Register</h2>
+      <form onSubmit={handleRegister}>
         <input
           type="email"
           placeholder="Email"
@@ -47,7 +48,7 @@ export default function Login() {
           style={{ width: "100%", padding: "10px", margin: "10px 0" }}
         />
         <button type="submit" style={{ padding: "10px 20px", marginTop: "10px" }}>
-          Login
+          Register
         </button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
