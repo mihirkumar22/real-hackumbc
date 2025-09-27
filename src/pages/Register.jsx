@@ -1,57 +1,127 @@
-import { useState } from "react";
-import { auth } from "../../firebase"; // Adjust path as needed
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import React, { useState, useRef } from 'react'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
+import ToggleButton from 'react-bootstrap/ToggleButton'
+import Button from 'react-bootstrap/Button'
+import Alert from 'react-bootstrap/Alert'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import BG from '../components/images/tree-bg.png';
+
 
 export default function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [role, setRole] = useState('student');
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      setUser(userCredential.user);
-      setError("");
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
+    const { register } = useAuth();
+    const navigate = useNavigate();
+
+    const emailRef = useRef();
+    const passwordRef = useRef();
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            await register(emailRef.current.value, passwordRef.current.value, role)
+            navigate('/dashboard')
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     }
-  };
 
-  if (user) {
+    function handleRoleChange(newRole) {
+        setRole(newRole);
+    }
+
     return (
-      <div>
-        <h2>Welcome, {user.email}</h2>
-        <p>Your account has been created!</p>
-      </div>
-    );
-  }
+        <div style={{ backgroundImage: `url(${BG})`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', padding: '20px' }}>
+                <Card style={{ width: '100%', maxWidth: '400px', borderRadius: '10px', boxShadow: "0 4px 10px rgba(0, 0, 0, 0.6)", border: 'none', backgroundColor: 'rgba(255, 255, 255, .6)' }}>
+                    <Card.Title style={{ textAlign: 'center', fontWeight: 'bold', paddingTop: '20px', color:'darkgreen' }}> <i>{role.toUpperCase()}</i> REGISTISTRATION</Card.Title>
 
-  return (
-    <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: "100%", padding: "10px", margin: "10px 0" }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", padding: "10px", margin: "10px 0" }}
-        />
-        <button type="submit" style={{ padding: "10px 20px", marginTop: "10px" }}>
-          Register
-        </button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
-  );
+                    <ToggleButtonGroup
+                        type="radio"
+                        name="options"
+                        value={role}
+                        onChange={handleRoleChange}
+                        style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px',  }}
+                    >
+                        <ToggleButton
+                            id="student"
+                            value={"student"}
+                            style={{
+                                marginLeft: '15px',
+                                height: '30px',
+                                padding: '0px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: role === "student" ? '#1e7e34' : '#28a745',
+                                borderColor: role === "student" ? '#1e7e34' : '#28a745',
+                                color: 'white'
+                            }}
+                        >
+                            Student
+                        </ToggleButton>
+
+                        <ToggleButton
+                            id="employer"
+                            value={"employer"}
+                            style={{
+                                marginRight: '15px',
+                                height: '30px',
+                                padding: '0px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: role === "employer" ? '#1e7e34' : '#28a745',
+                                borderColor: role === "employer" ? '#1e7e34' : '#28a745',
+                                color: 'white'
+                            }}
+                        >
+                            Employer
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+
+                    {error && <Alert variant="danger">{error}</Alert>}
+                    <Card.Body>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group id="email" style={{ marginBottom: '15px' }}>
+                                <Form.Label> <b> Email Address </b> </Form.Label>
+                                <Form.Control type="email" placeholder="Enter email" ref={emailRef} />
+                            </Form.Group>
+                            <Form.Group id="password" style={{ marginBottom: '15px',  }}>
+                                <Form.Label><b>Enter Password</b></Form.Label>
+                                <Form.Control type="password" placeholder="Enter password" ref={passwordRef} />
+                            </Form.Group>
+                            <Button
+                                disabled={loading}
+                                type="submit"
+                                style={{
+                                    width: '100%', // Make the button wider
+                                    marginTop: '15px',
+                                    backgroundColor: '#28a745', // Green color
+                                    borderColor: '#28a745',
+                                    padding: '10px 0', // Adjust padding for a longer button
+                                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.4)",
+                                }}
+                                onMouseEnter={(e) => (e.target.style.backgroundColor = '#218838')} // Dark green on hover
+                                onMouseLeave={(e) => (e.target.style.backgroundColor = '#28a745')} // Reset to green on hover out
+                            >
+                                {loading ? "Loading..." : "Submit"}
+                            </Button>
+                        </Form>
+                        <Card.Text style={{ textAlign: 'center', marginTop: '15px' }}>
+                            <b >Already have an account?</b> <Link to="/login" style={{color: 'darkGreen'}} onMouseEnter={(e) => (e.target.style.color = '#218838')} onMouseLeave={(e) => (e.target.style.color = 'darkGreen')}><b> Log In </b></Link>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            </div>
+        </div>
+
+    )
 }

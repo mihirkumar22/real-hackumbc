@@ -1,20 +1,24 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
-import Login from './pages/login'
-import Register from './pages/Register'
+import App from './App'
 import { AuthProvider } from './contexts/AuthContext'
+import { UserProvider } from './contexts/UserContext'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { PostingsProvider } from './contexts/PostingsContext'
+import { NotificationProvider } from './contexts/NotificationContext'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-    <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
-  </StrictMode>,
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+    <StrictMode>
+        <AuthProvider>
+            <UserProvider>
+                <NotificationProvider>
+                    <PostingsProvider>
+                        <App />
+                    </PostingsProvider>
+                </NotificationProvider>
+            </UserProvider>
+        </AuthProvider>
+    </StrictMode>
 )
