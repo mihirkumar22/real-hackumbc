@@ -28,6 +28,10 @@ export default function Home() {
     return (
         <div style={{ height: '100vh', overflowY: 'auto', backgroundColor: mobileView ? '#e0e0e0' : '#e0e0e0' }}>
             <LandingNavbar></LandingNavbar>
+            <div className = "landing-hero">
+                <div className = "landing-hero-left"></div>
+                <div className = "landing-hero-right"></div>
+            </div>
         </div>
     );
 }
