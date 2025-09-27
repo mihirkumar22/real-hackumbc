@@ -22,7 +22,8 @@ export function AuthProvider({ children }) {
         return unsubscribe;
     }, [])
 
-    async function register(email, password, role) {
+    async function register(email, password) {
+        console.log("hi");
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -33,26 +34,10 @@ export function AuthProvider({ children }) {
                 uid: user.uid,
                 email: user.email,
                 createdAt: new Date().toISOString(),
-                role: role,
             }
             
-            if (role == 'employer') {
-                userData.savedStudents = [];
-            }
-            
-            if (role == 'student') {
-                const appliedPostingsRef = doc(db, 'applied-postings', user.uid);
-                await setDoc(appliedPostingsRef, { appliedPostings: []});
-            }
-
-            const notificationDocRef = doc(db, 'notifications', user.uid);
-            const notificationData = {
-                notifications: [],
-                notificationStatus: false,
-            }
 
             await setDoc(userDocRef, userData);
-            await setDoc(notificationDocRef, notificationData);
 
             return userCredential;
         } catch (error) {

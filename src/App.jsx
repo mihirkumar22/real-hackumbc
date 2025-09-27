@@ -9,10 +9,6 @@ import Unauthorized from './pages/Unauthorized'
 import ProtectedLayout from './components/ProtectedLayout'
 import Dashboard from './pages/Dashboard'
 import EditProfile from './pages/EditProfile'
-import Postings from './pages/Postings'
-import ViewProfile from './pages/ViewProfile'
-import BookmarkedStudents from './pages/BookmarkedStudents'
-import Notifications from './pages/Notifications'
 import Home from './pages/Home'
 
 export default function App() {
@@ -30,12 +26,6 @@ export default function App() {
                 <Route element={<ProtectedLayout />}>
                    <Route path="/dashboard" element={<Dashboard />} />
                    <Route path="/edit-profile" element={<EditProfile />} />
-                   <Route path="/postings" element={<Postings />} />
-                   <Route path="/your-postings" element={<Postings />} />
-                   <Route path="/your-applications" element={<Postings />} />
-                   <Route path="/view-profile/:userId" element={<ViewProfile />} />
-                   <Route path="/bookmarked-students" element={<BookmarkedStudents />} />
-                   <Route path="/notifications" element={<Notifications />} />
                 </Route>
 
             </Routes>
