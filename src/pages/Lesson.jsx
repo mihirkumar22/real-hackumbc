@@ -40,7 +40,7 @@ async function fetchLesson(unit, lesson) {
 export default function Lesson() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { unit, lesson } = location.state || {};
+    const { unit = 1, lesson = 1 } = location.state || {};
     const [lessonData, setLessonData] = useState(null);
     const [questionOrder, setQuestionOrder] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -205,36 +205,44 @@ export default function Lesson() {
                         />
 
                         {/* Answer options */}
-                        <div style={{
-                            display: "flex", flexDirection: "row", alignItems: "center", gap: "12px", width: "600px",
-                            justifyContent: "center"
-                        }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: "12px",
+                                width: "600px",
+                                justifyContent: "center",
+                            }}
+                        >
                             {answerOptions.map((option) => (
                                 <button
                                     key={option}
                                     onClick={() => !submitted && setSelectedAnswer(option)}
                                     style={{
-                                        width: "60px",
-                                        height: "48px",
-                                        padding: "12px",
-                                        backgroundColor:
-                                            submitted && option === correctAnswer
-                                                ? "green"
-                                                : submitted && option === selectedAnswer
-                                                    ? "red"
-                                                    : selectedAnswer === option
-                                                        ? "#ddd"
-                                                        : "#eee",
-                                        border: "1px solid #ccc",
-                                        borderRadius: "8px",
+                                        padding: "12px 20px",
+                                        fontSize: "18px",
+                                        fontWeight: "bold",
+                                        color: "blue",
+                                        backgroundColor: "white",
+                                        border: "2px solid blue", // thin outline on sides/top
+                                        borderBottomWidth: "6px", // thick bottom border
+                                        borderRadius: "12px", // rounded corners
                                         cursor: submitted ? "default" : "pointer",
+                                        transition: "all 0.2s ease",
                                     }}
+                                    onMouseEnter={(e) =>
+                                        (e.currentTarget.style.backgroundColor = "#f0f8ff")
+                                    }
+                                    onMouseLeave={(e) =>
+                                        (e.currentTarget.style.backgroundColor = "white")
+                                    }
                                 >
                                     {option.toUpperCase()}
                                 </button>
                             ))}
-
                         </div>
+
                     </>
                 ) : (
                     <>
@@ -254,26 +262,22 @@ export default function Lesson() {
                             ? "green"
                             : submitted && selectedAnswer !== correctAnswer
                                 ? "red"
-                                : "#f5f5f5",
+                                : "#ffffff",
                     display: "flex",
                     justifyContent: "center",
                     gap: "16px", // spacing between buttons
                 }}
             >
                 {!submitted ? (
-                    <button
-                        onClick={handleSubmit}
-                        disabled={!selectedAnswer}
-                        style={{
-                            padding: "12px 24px",
-                            backgroundColor: selectedAnswer ? "blue" : "gray",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "8px",
-                            cursor: selectedAnswer ? "pointer" : "not-allowed",
-                        }}
-                    >
-                        Submit
+                    <button key={option} onClick={() => !submitted && setSelectedAnswer(option)} style={{
+                        padding: "12px",
+                        backgroundColor: submitted && option === correctAnswer ?
+                            "green" : submitted && option === selectedAnswer ?
+                                "red" : selectedAnswer === option ?
+                                    "#ddd" : "#eee", border: "1px solid #ccc",
+                        borderRadius: "8px", cursor: submitted ? "default" : "pointer",
+                    }} >
+                        {option.toUpperCase()}
                     </button>
                 ) : currentQuestionIndex < totalQuestions - 1 ? (
                     <button
