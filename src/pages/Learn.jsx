@@ -3,6 +3,7 @@ import CustomNavbar from '../components/CustomNavbar';
 import './Learn.css';
 import cloudImg from '../components/images/cloud.png';
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from '../contexts/UserContext';
 
 // Import your lesson images
 import letter from '../components/images/letter.png';
