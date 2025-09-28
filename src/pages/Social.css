@@ -67,49 +67,75 @@
     text-align: center;
 }
 
-.friend-list {
-    border: 2px solid black;
-    padding: 5px 10px;
-    border-radius: 10px;
-}
-
-/* Friend list row */
 .friend-item {
-  padding: 10px 15px;
-}
-
-.friend-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
 }
 
-/* Profile pic */
-.friend-pfp {
-  width: 45px;
-  height: 45px;
-  object-fit: cover;
-  border: 2px solid #ccc;
+.friend-pic {
+  width: 50px;
+  height: 50px;
 }
 
-/* Friend name */
 .friend-name {
-  flex-grow: 1;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
+  font-weight: bold;
+  flex: 1;
 }
 
-/* Streaks */
 .friend-streaks {
   display: flex;
-  gap: 8px;
+  gap: 5px;
+}
+
+.social-form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0px 130px;
+  margin-bottom: 15px;
+}
+.social-button {
+  background-color: #499f69;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 5px;
 }
 
 .streak-circle {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  border: 2px solid #ff9800;
-  background-color: transparent;
 }
+
+.friend-item {
+  display: flex;
+  align-items: center;
+}
+
+.friend-pic {
+  width: 50px;
+  height: 50px;
+}
+
+.friend-streaks .streak-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.streak-circle.max {
+  background-color: #ff9800;
+}
+
+.streak-circle.current {
+  background-color: #4caf50;
+}
+
