@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -40,9 +40,45 @@ async function fetchLesson(unit, lesson) {
 }
 
 export default function Lesson() {
+    //webcam variables
+    const videoRef = useRef(null);
+    const [prediction, setPrediction] = useState("");
+
+    useEffect(() => {
+        // Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                if (videoRef.current) videoRef.current.srcObject = stream;
+            });
+    }, []);
+
+    //create predictions func
+    const captureAndPredict = async () => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const imageBase64 = canvas.toDataURL("image/jpeg");
+
+        const response = await fetch("http://localhost:5000/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image: imageBase64 })
+        });
+        const result = await response.json();
+        setPrediction(result.prediction || "");
+
+        setSelectedAnswer(result.prediction.toLowerCase())
+    };
+
     const location = useLocation();
     const navigate = useNavigate();
-    const { unit , lesson } = location.state || {};
+    const { unit, lesson } = location.state || {};
     const [lessonData, setLessonData] = useState(null);
     const [questionOrder, setQuestionOrder] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -141,7 +177,7 @@ export default function Lesson() {
             [currentQuestionIndex]: isCorrect,
         }));
         setSubmitted(true);
-        
+
         // Show success animation if answer is correct
         if (isCorrect) {
             console.log('Correct answer! Showing animation...');
@@ -174,9 +210,9 @@ export default function Lesson() {
             {showSuccessAnimation && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
                     <div className="relative">
-                        <dotlottie-wc 
-                            src="/hackumbccorrect.lottie" 
-                            style={{width: "300px", height: "300px"}} 
+                        <dotlottie-wc
+                            src="/hackumbccorrect.lottie"
+                            style={{ width: "300px", height: "300px" }}
                             autoplay
                         ></dotlottie-wc>
                     </div>
@@ -192,137 +228,160 @@ export default function Lesson() {
             </button>
 
             <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-            {/* Top: Progress bars */}
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: "8px",
-                    padding: "32px",
-                    marginLeft: "12.5%",
-                    marginRight: "12.5%",
-                }}
-            >
-                {topBarColors.map((color, i) => (
-                    <div
-                        key={i}
-                        style={{
-                            height: "16px",
-                            flex: 1,
-                            borderRadius: "8px",
-                            border: i === currentQuestionIndex ? "2px solid #16a34a" : "none",
-                            backgroundColor: color,
-                        }}
-                    />
-                ))}
-            </div>
-
-            {/* Middle: Question and sign */}
-            <div
-                style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                {lessonData.questionType == 'multipleChoice' ? (
-                    <>
-                        {/* Question type */}
-                        <h2 className="text-3xl font-bold mb-8 text-gray-800">
-                            Choose the correct answer.
-                        </h2>
-
-                        {/* Sign image placeholder */}
-                        <img
-                            src={imageCache[correctAnswer]}
-                            alt={`Sign for ${correctAnswer}`}
-                            style={{ height: "200px", marginBottom: "32px" }}
-                        />
-
-                        {/* Answer options */}
+                {/* Top: Progress bars */}
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "8px",
+                        padding: "32px",
+                        marginLeft: "12.5%",
+                        marginRight: "12.5%",
+                    }}
+                >
+                    {topBarColors.map((color, i) => (
                         <div
+                            key={i}
                             style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                gap: "12px",
-                                width: "600px",
-                                justifyContent: "center",
+                                height: "16px",
+                                flex: 1,
+                                borderRadius: "8px",
+                                border: i === currentQuestionIndex ? "2px solid #16a34a" : "none",
+                                backgroundColor: color,
                             }}
-                        >
-                            {answerOptions.map((option) => (
-                                <Button
-                                    key={option}
-                                    onClick={() => !submitted && setSelectedAnswer(option)}
-                                    disabled={submitted}
-                                    variant={selectedAnswer === option ? "default" : "outline"}
-                                    className="text-lg font-bold px-6 py-3 min-w-[80px]"
-                                >
-                                    {option.toUpperCase()}
-                                </Button>
-                            ))}
-                        </div>
+                        />
+                    ))}
+                </div>
 
-                    </>
-                ) : (
-                    <>
-                        <h2 style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "32px" }}>
-                            Sign the following letter: {correctAnswer}
-                        </h2>
+                {/* Middle: Question and sign */}
+                <div
+                    style={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    {lessonData.questionType == 'multipleChoice' ? (
+                        <>
+                            {/* Question type */}
+                            <h2 className="text-3xl font-bold mb-8 text-gray-800">
+                                Choose the correct answer.
+                            </h2>
 
-                    </>
-                )}
+                            {/* Sign image placeholder */}
+                            <img
+                                src={imageCache[correctAnswer]}
+                                alt={`Sign for ${correctAnswer}`}
+                                style={{ height: "200px", marginBottom: "32px" }}
+                            />
 
-            </div>
 
-            {/* Bottom bar */}
-            <div
-                className={`p-4 border-t border-gray-200 flex justify-center gap-4 ${
-                    submitted && selectedAnswer === correctAnswer
+
+                            {/* Answer options */}
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                    width: "600px",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                {answerOptions.map((option) => (
+                                    <Button
+                                        key={option}
+                                        onClick={() => !submitted && setSelectedAnswer(option)}
+                                        disabled={submitted}
+                                        variant={selectedAnswer === option ? "default" : "outline"}
+                                        className="text-lg font-bold px-6 py-3 min-w-[80px]"
+                                    >
+                                        {option.toUpperCase()}
+                                    </Button>
+                                ))}
+                            </div>
+
+                        </>
+                    ) : (
+                        <>
+                            <h2
+                                style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "32px" }}
+                            >
+                                Sign the following letter: {correctAnswer}
+                            </h2>
+
+                            <div className="flex gap-4 p-4">
+                                <div className="flex-1 flex flex-col">
+                                    <video
+                                        ref={videoRef}
+                                        autoPlay
+                                        className="w-full rounded-lg shadow"
+                                    />
+                                    <button
+                                        onClick={captureAndPredict}
+                                        className="mt-2 w-full py-3 bg-blue-500 text-white font-semibold rounded shadow hover:bg-blue-600 transition"
+                                    >
+                                        Predict
+                                    </button>
+                                </div>
+
+                                <div className="flex-1 flex items-center justify-center text-4xl font-bold">
+                                    {prediction ? `Prediction: ${prediction}` : "No Prediction"}
+                                </div>
+                            </div>
+
+                        </>
+                    )}
+
+                </div>
+
+                {/* Bottom bar */}
+                <div
+                    className={`p-4 border-t border-gray-200 flex justify-center gap-4 ${submitted && selectedAnswer === correctAnswer
                         ? "bg-green-50"
                         : submitted && selectedAnswer !== correctAnswer
                             ? "bg-red-50"
                             : "bg-white"
-                }`}
-            >
-                {!submitted ? (
-                    <Button
-                        onClick={handleSubmit}
-                        disabled={!selectedAnswer}
-                        variant={selectedAnswer ? "default" : "secondary"}
-                        size="lg"
-                    >
-                        Submit
-                    </Button>
-                ) : currentQuestionIndex < totalQuestions - 1 ? (
-                    <Button
-                        onClick={handleNext}
-                        variant="default"
-                        size="lg"
-                    >
-                        Next
-                    </Button>
-                ) : (
-                    <>
+                        }`}
+                >
+                    {!submitted ? (
                         <Button
-                            onClick={() => navigate("/learn")}
+                            onClick={handleSubmit}
+                            disabled={!selectedAnswer}
+                            variant={selectedAnswer ? "default" : "secondary"}
+                            size="lg"
+                        >
+                            Submit
+                        </Button>
+                    ) : currentQuestionIndex < totalQuestions - 1 ? (
+                        <Button
+                            onClick={handleNext}
                             variant="default"
                             size="lg"
                         >
-                            Go to Learn
+                            Next
                         </Button>
-                        <Button
-                            onClick={() => window.location.reload()}
-                            variant="secondary"
-                            size="lg"
-                        >
-                            Retry Lesson
-                        </Button>
-                    </>
-                )}
-            </div>
+                    ) : (
+                        <>
+                            <Button
+                                onClick={() => navigate("/learn")}
+                                variant="default"
+                                size="lg"
+                            >
+                                Go to Learn
+                            </Button>
+                            <Button
+                                onClick={() => window.location.reload()}
+                                variant="secondary"
+                                size="lg"
+                            >
+                                Retry Lesson
+                            </Button>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );
