@@ -36,7 +36,7 @@
   width: 100px;
   height: 100px;
   margin: 15px 0;
-  background-color: #499f68;
+  background-color: #a4a4a4;
   color: white;
   display: flex;
   align-items: center;
@@ -53,6 +53,7 @@
   height: 70%;
   object-fit: contain;
   pointer-events: none;
+  filter: saturate(0);
 }
 
 .learn-floor {
@@ -120,7 +121,7 @@
 }
 
 .practice-btn {
-  background: #499f68;
+  background: #499f69;
   color: white;
   border: none;
   padding: 10px 20px;
