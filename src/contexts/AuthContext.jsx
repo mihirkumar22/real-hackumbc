@@ -42,7 +42,10 @@ export function AuthProvider({ children }) {
                 lessonsAvailable: ["1-1"],
                 userName: "",
                 profilePic: "",
-                dailyTimeSpent: {} // <-- initialize daily time tracking
+                dailyTimeSpent: {}, // initialize daily time tracking
+                currentStreak: 0,
+                maxStreak: 0,
+                lastLogin: null
             };
             await setDoc(userDocRef, userData);
 
@@ -67,10 +70,54 @@ export function AuthProvider({ children }) {
         }
     }
 
+    // Update streaks on login
+    async function updateLoginStreak(userId) {
+        const userRef = doc(db, "users", userId);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) return;
+
+        const data = userSnap.data();
+        const today = new Date();
+        const todayStr = today.toISOString().split("T")[0]; // YYYY-MM-DD
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+        let currentStreak = data.currentStreak || 0;
+        let maxStreak = data.maxStreak || 0;
+        const lastLogin = data.lastLogin || null;
+
+        if (lastLogin === todayStr) {
+            // Already logged in today, do nothing
+            return;
+        }
+
+        if (lastLogin === yesterdayStr) {
+            // Consecutive login
+            currentStreak += 1;
+        } else {
+            // Missed a day
+            currentStreak = 1;
+        }
+
+        if (currentStreak > maxStreak) {
+            maxStreak = currentStreak;
+        }
+
+        await updateDoc(userRef, {
+            currentStreak,
+            maxStreak,
+            lastLogin: todayStr
+        });
+    }
+
     // Login
     async function login(email, password) {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+            // Update streak after login
+            await updateLoginStreak(userCredential.user.uid);
         } catch (error) {
             let message = "An unknown error occurred. Please try again.";
             if (error.code === "auth/user-not-found") message = "No account found with this email.";
