@@ -73,7 +73,11 @@ export default function Lesson() {
         const result = await response.json();
         setPrediction(result.prediction || "");
 
-        setSelectedAnswer(result.prediction.toLowerCase())
+        if (result.prediction == 'S') {
+            setPrediction('A');
+        }
+        setSelectedAnswer(result.prediction.toLowerCase());
+        
     };
 
     const location = useLocation();

@@ -3,6 +3,9 @@ import CustomNavbar from '../components/CustomNavbar';
 import './Learn.css';
 import cloudImg from '../components/images/cloud.png';
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from '../contexts/UserContext';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from "../firebase"; // adjust paths
 
 // Import your lesson images
 import letter from '../components/images/letter.png';
@@ -16,24 +19,77 @@ import responses from '../components/images/responses.png';
 
 export default function Learn() {
   const containerRef = useRef(null);
+  const spacerRef = useRef(null);
   const navigate = useNavigate();
-
   const { userData } = useUserContext();
+  const [friendsData, setFriendsData] = useState([]);
 
-  // State for selected lesson
+  useEffect(() => {
+    const fetchFriendsData = async () => {
+      if (!userData) return;
+
+      const results = [];
+
+      // --- Include current user
+      const userLastLesson =
+        userData.lessonsCompleted?.slice(-1)[0] || null;
+      results.push({
+        id: userData.uid,
+        lastLessonId: userLastLesson,
+        displayName: userData.userName || userData.email || userData.uid,
+      });
+
+      // --- Include friends
+      if (userData.friends && userData.friends.length > 0) {
+        for (const uid of userData.friends) {
+          try {
+            const snap = await getDoc(doc(db, "users", uid));
+            if (snap.exists()) {
+              const data = snap.data();
+              const lessonsCompleted = data.lessonsCompleted || [];
+              const lastLessonId = lessonsCompleted.slice(-1)[0] || null;
+              const displayName = data.userName || data.email || uid;
+
+              results.push({
+                id: uid,
+                lastLessonId,
+                displayName,
+              });
+            }
+          } catch (err) {
+            console.error("Error fetching friend data for UID:", uid, err);
+          }
+        }
+      }
+
+      // --- Sort hierarchy
+      const lessonOrder = [
+        "1-7", "1-6", "1-5", "1-4", "1-3", "1-2", "1-1",
+        "2-9", "2-8", "2-7", "2-6", "2-5", "2-4", "2-3", "2-2", "2-1",
+        "3-5", "3-4", "3-3", "3-2", "3-1"
+      ];
+
+      results.sort((a, b) => {
+        const idxA = lessonOrder.indexOf(a.lastLessonId);
+        const idxB = lessonOrder.indexOf(b.lastLessonId);
+        // If lesson not in order, put at the end
+        return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
+      });
+
+      setFriendsData(results);
+    };
+
+    fetchFriendsData();
+  }, [userData]);
+
+
   const [selectedLesson, setSelectedLesson] = useState(null);
 
-  // Handle node click to toggle floor
   const handleNodeClick = (node) => {
-    // Check if userData and lessonsAvailable exist
     const availableLessons = userData?.lessonsAvailable || [];
-
-    // Determine if node is unlocked
     const isUnlocked = availableLessons.includes(node.id);
 
-    if (!isUnlocked) {
-      return; // Don't allow clicking locked lessons
-    }
+    if (!isUnlocked) return;
 
     if (selectedLesson && selectedLesson.id === node.id) {
       setSelectedLesson(null);
@@ -42,14 +98,13 @@ export default function Learn() {
     }
   };
 
-  // Handle practice navigation
   const handleClick = (unit, lesson) => {
     navigate("/lesson", {
       state: { unit, lesson }
     });
   };
 
-  // Array of lessons with unit + lesson
+  // Lessons array
   const lessons = [
     { unit: 1, lesson: 7, icon: crown, title: "Letter Mastery", description: "Test your proficiency of ASL Letters" },
     { unit: 1, lesson: 6, icon: camera, title: "Practice Letters 3", description: "Practice what you learned in the previous lesson." },
@@ -58,7 +113,6 @@ export default function Learn() {
     { unit: 1, lesson: 3, icon: letter, title: "Middle Alphabet", description: "Learn some more ASL Letters." },
     { unit: 1, lesson: 2, icon: camera, title: "Practice Letters 1", description: "Practice what you learned in the previous lesson." },
     { unit: 1, lesson: 1, icon: letter, title: "First Letters", description: "Learn your first ASL Letters." },
-
     { unit: 2, lesson: 9, icon: crown, title: "Simple Word Mastery", description: "Practice your ability to sign simple words" },
     { unit: 2, lesson: 8, icon: camera, title: "Practice Requests", description: "Practice asking for needs." },
     { unit: 2, lesson: 7, icon: questions, title: "Requests", description: "Learn how to ask for basic needs." },
@@ -68,7 +122,6 @@ export default function Learn() {
     { unit: 2, lesson: 3, icon: family, title: "Family", description: "Introduce family-related signs like mother, father, and siblings." },
     { unit: 2, lesson: 2, icon: camera, title: "Practice Colors", description: "Practice signing basic colors" },
     { unit: 2, lesson: 1, icon: color, title: "Colors", description: "Learn the ASL signs for different colors." },
-
     { unit: 3, lesson: 5, icon: crown, title: "Simple Sentence Mastery", description: "Master questions and responses." },
     { unit: 3, lesson: 4, icon: camera, title: "Practice Responding", description: "Practice simple question responses" },
     { unit: 3, lesson: 3, icon: responses, title: "Responses", description: "Practice common replies such as yes, no, maybe." },
@@ -76,27 +129,63 @@ export default function Learn() {
     { unit: 3, lesson: 1, icon: questions, title: "Questions", description: "Practice WH-questions: who, what, when, where, why." }
   ];
 
-  // Group sizes for 7, 9, 5
   const groupSizes = [7, 9, 5];
 
-  // Split lessons into groups
   let start = 0;
   const groups = groupSizes.map((size) => {
     const nodes = lessons.slice(start, start + size).map((lesson) => ({
-      id: `${lesson.unit}-${lesson.lesson}`, // unit-lesson ID
+      id: `${lesson.unit}-${lesson.lesson}`,
       ...lesson,
     }));
     start += size;
     return { nodes };
   });
 
+  // Map lessons to pixel heights in spacer
+  let currentHeight = 0;
 
-
+  // Scroll to bottom on mount
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, []);
+
+  // Match spacer height to node container
+  useEffect(() => {
+    const updateSpacerHeight = () => {
+      if (containerRef.current && spacerRef.current) {
+        spacerRef.current.style.height = `${containerRef.current.scrollHeight}px`;
+      }
+    };
+    updateSpacerHeight();
+    window.addEventListener("resize", updateSpacerHeight);
+    return () => window.removeEventListener("resize", updateSpacerHeight);
+  }, []);
+
+  const lessonPositions = {
+    '1-1': 110,
+    '1-2': 220,
+    '1-3': 330,
+    '1-4': 440,
+    '1-5': 550,
+    '1-6': 660,
+    '1-7': 770,
+    '2-1': 1530,
+    '2-2': 1640,
+    '2-3': 1750,
+    '2-4': 1860,
+    '2-5': 1970,
+    '2-6': 2080,
+    '2-7': 2190,
+    '2-8': 2300,
+    '2-9': 2410,
+    '3-1': 3170,
+    '3-2': 3280,
+    '3-3': 3390,
+    '3-4': 3500,
+    '3-5': 3610,
+  };
 
   return (
     <div className="learn">
@@ -112,14 +201,24 @@ export default function Learn() {
       </div>
 
       {/* Right sidebar */}
-      <div className="right-sidebar"></div>
+      <div className="right-sidebar">
+        <div className="leaderboard">
+          <h3 className="leaderboard-header">Friend Leaderboard</h3>
+          {friendsData.map((friend) => (
+            <div key={friend.id} className="friend-entry">
+              <div>{friend.displayName}</div>
+              <div>{friend.lastLessonId}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
+      {/* Lessons */}
       <div className="learn-node-container" ref={containerRef}>
         {groups.map((group, groupIdx) => (
           <div key={groupIdx} className="group">
             <img src={cloudImg} alt="Cloud" className="cloud" />
             {group.nodes.map((node, idx) => {
-              // Check if this node is unlocked by userData
               const isUnlocked = userData?.lessonsAvailable?.includes(node.id);
               return (
                 <div
@@ -138,24 +237,17 @@ export default function Learn() {
       {/* Floor panel */}
       {selectedLesson && (
         <div className="learn-floor active">
-          {/* Close (X) button */}
-          <button
-            className="floor-close-btn"
-            onClick={() => setSelectedLesson(null)}
-          >
+          <button className="floor-close-btn" onClick={() => setSelectedLesson(null)}>
             ✕
           </button>
 
           <h3>{selectedLesson.title}</h3>
           <p>{selectedLesson.description}</p>
 
-          {/* Practice button */}
           <div className="practice-btn-wrapper">
             <button
               className="practice-btn"
-              onClick={() =>
-                handleClick(selectedLesson.unit, selectedLesson.lesson)
-              }
+              onClick={() => handleClick(selectedLesson.unit, selectedLesson.lesson)}
             >
               Practice It!
             </button>
