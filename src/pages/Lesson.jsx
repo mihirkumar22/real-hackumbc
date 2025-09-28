@@ -312,23 +312,27 @@ export default function Lesson() {
                                 Sign the following letter: {correctAnswer}
                             </h2>
 
-                            <div className="flex gap-4 p-4">
+                            <div className="flex gap-6 p-4">
                                 <div className="flex-1 flex flex-col">
                                     <video
                                         ref={videoRef}
                                         autoPlay
                                         className="w-full rounded-lg shadow"
                                     />
-                                    <button
+                                    <Button
                                         onClick={captureAndPredict}
-                                        className="mt-2 w-full py-3 bg-blue-500 text-white font-semibold rounded shadow hover:bg-blue-600 transition"
+                                        variant="default"
+                                        size="lg"
+                                        className="mt-2 w-full"
                                     >
                                         Predict
-                                    </button>
+                                    </Button>
                                 </div>
 
-                                <div className="flex-1 flex items-center justify-center text-4xl font-bold">
-                                    {prediction ? `Prediction: ${prediction}` : "No Prediction"}
+                                <div className="flex-1 flex flex-col">
+                                    <div className="text-center text-4xl font-bold text-gray-800 mb-4">
+                                        {prediction ? `Prediction: ${prediction}` : "No Prediction"}
+                                    </div>
                                 </div>
                             </div>
 
