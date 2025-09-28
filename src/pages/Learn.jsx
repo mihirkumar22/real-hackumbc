@@ -13,7 +13,7 @@ import family from '../components/images/family.png';
 import emotion from '../components/images/emotion.png';
 import questions from '../components/images/questions.png';
 import responses from '../components/images/responses.png';
-
+import { useUserContext } from '../contexts/UserContext';
 export default function Learn() {
   const containerRef = useRef(null);
   const navigate = useNavigate();
