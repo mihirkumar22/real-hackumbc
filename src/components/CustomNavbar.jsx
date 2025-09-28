@@ -9,14 +9,26 @@ function CustomNavbar() {
     const { logout } = useAuth();
     const location = useLocation();
 
+    // Check if we're on the Learn page
+    const isLearnPage = location.pathname === '/learn';
+
     return (
         <nav className="sidebar">
             {/* Logo */}
             <div className="sidebar-logo">
-                <Link to="/" className="logo-link">
-                    <div className="text-lg">🌱</div>
-                    <span className="text-sm font-bold">Beanstalk</span>
-                </Link>
+                {isLearnPage ? (
+                    // On Learn page, make logo unclickable
+                    <div className="logo-link" style={{ cursor: 'default', pointerEvents: 'none' }}>
+                        <div className="text-lg">🌱</div>
+                        <span className="text-sm font-bold">Beanstalk</span>
+                    </div>
+                ) : (
+                    // On other pages, keep it clickable
+                    <Link to="/" className="logo-link">
+                        <div className="text-lg">🌱</div>
+                        <span className="text-sm font-bold">Beanstalk</span>
+                    </Link>
+                )}
             </div>
 
             {/* Navigation Links */}
