@@ -29,18 +29,7 @@ html, body {
   border: 2px solid red;
 }
 
-.landing-hero-left{
-  width: 50%;
+.landing-hero-banner{
   height: 100%;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid blue;
-}
-
-.landing-hero-right{
-  width: 50%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid green;
+  width: 100%;
 }

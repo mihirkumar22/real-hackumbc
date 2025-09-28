@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LandingNavbar from '../components/LandingNavbar';
 import './Home.css';
-import logo from '../components/images/BEANSTACKLogo.png';
 
 
 
@@ -26,11 +25,10 @@ export default function Home() {
     }, [])
 
     return (
-        <div style={{ height: '100vh', overflowY: 'auto', backgroundColor: mobileView ? '#e0e0e0' : '#e0e0e0' }}>
+        <div>
             <LandingNavbar></LandingNavbar>
             <div className = "landing-hero">
-                <div className = "landing-hero-left"></div>
-                <div className = "landing-hero-right"></div>
+                
             </div>
         </div>
     );
