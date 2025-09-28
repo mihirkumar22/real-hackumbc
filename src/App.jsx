@@ -11,6 +11,10 @@ import Dashboard from './pages/Dashboard'
 import EditProfile from './pages/EditProfile'
 import Home from './pages/Home'
 import Learn from './pages/Learn'
+import ActivityTracker from './components/ActivityTracker';
+
+import { useAuth } from './contexts/AuthContext';
+
 
 export default function App() {
     const { currentUser } = useAuth();
