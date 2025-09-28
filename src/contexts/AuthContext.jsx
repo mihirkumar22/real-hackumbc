@@ -1,7 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut
+} from "firebase/auth";
+import { auth, db, storage } from "../firebase";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AuthContext = createContext();
 
@@ -17,90 +23,97 @@ export function AuthProvider({ children }) {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user);
             setLoading(false);
-        })
+        });
 
         return unsubscribe;
-    }, [])
+    }, []);
 
+    // Register a new user
     async function register(email, password) {
-        console.log("hi");
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
             const user = userCredential.user;
 
-            const userDocRef = doc(db, 'users', user.uid)
+            const userDocRef = doc(db, "users", user.uid);
             const userData = {
                 uid: user.uid,
                 email: user.email,
                 createdAt: new Date().toISOString(),
-            }
-            
-
+                lessonsCompleted: [],
+                lessonsAvailable: ["1-1"],
+                userName: "",
+                profilePic: ""
+            };
             await setDoc(userDocRef, userData);
 
             return userCredential;
         } catch (error) {
-            console.error(error);  // Log the entire error object for debugging
-            let errorMessage = "An unknown error occurred. Please try again later.";
-        
-            // Firebase error codes may be like 'auth/email-already-in-use'
-            if (error && error.code) {
+            console.error(error);
+            let message = "An unknown error occurred. Please try again.";
+            if (error.code) {
                 switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        errorMessage = 'This email is already in use. Please use a different one.';
+                    case "auth/email-already-in-use":
+                        message = "This email is already in use.";
                         break;
-                    case 'auth/weak-password':
-                        errorMessage = 'Password should be at least 6 characters long.';
+                    case "auth/weak-password":
+                        message = "Password should be at least 6 characters long.";
                         break;
-                    case 'auth/invalid-email':
-                        errorMessage = 'Please enter a valid email address.';
-                        break;
-                    default:
-                        errorMessage = 'An unknown error occurred. Please try again later.';
+                    case "auth/invalid-email":
+                        message = "Please enter a valid email address.";
                         break;
                 }
             }
-        
-            // Display the error message to the user or throw it
-            throw new Error(errorMessage);
+            throw new Error(message);
         }
     }
 
+    // Login
     async function login(email, password) {
         try {
             await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
-            let errorMessage = "An unknown error occurred. Please try again."
-            
-            if (error.code === "auth/user-not-found") {
-                errorMessage = "No account found with this email. Please check your email or sign up.";
-            } else if (error.code === "auth/wrong-password") {
-                errorMessage = "Incorrect password. Please try again.";
-            } else if (error.code === "auth/invalid-email") {
-                errorMessage = "The email address is invalid. Please check and try again.";
-            } else if (error.code === "auth/too-many-requests") {
-                errorMessage = "Too many failed login attempts. Please try again later or reset your password.";
-            }
-
-            throw new Error(errorMessage);
+            let message = "An unknown error occurred. Please try again.";
+            if (error.code === "auth/user-not-found") message = "No account found with this email.";
+            else if (error.code === "auth/wrong-password") message = "Incorrect password.";
+            else if (error.code === "auth/too-many-requests")
+                message = "Too many login attempts. Try later.";
+            throw new Error(message);
         }
     }
 
+    // Logout
     function logout() {
         return signOut(auth);
+    }
+
+    // Update user data and optionally upload profile pic
+    async function updateUserProfile(userId, data, file) {
+        try {
+            let profilePicUrl = data.profilePic || "";
+
+            if (file) {
+                const storageRef = ref(storage, `profilePics/${userId}_${file.name}`);
+                await uploadBytes(storageRef, file);
+                profilePicUrl = await getDownloadURL(storageRef);
+            }
+
+            const userRef = doc(db, "users", userId);
+            await updateDoc(userRef, { ...data, profilePic: profilePicUrl });
+
+            return profilePicUrl;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
     }
 
     const value = {
         currentUser,
         register,
         login,
-        logout
-    }
+        logout,
+        updateUserProfile
+    };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {!loading && children}
-        </AuthContext.Provider>
-    )
+    return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 }
