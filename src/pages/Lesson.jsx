@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useUserContext } from "../contexts/UserContext";
+import { Button } from "../components/ui/button";
+// Using dotlottie web component instead
 
 import aImg from "../components/images/a.png";
 import bImg from "../components/images/b.png";
@@ -53,6 +55,7 @@ export default function Lesson() {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [correctAnswers, setCorrectAnswers] = useState({}); // track which questions were correct
+    const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
     const totalQuestions = questionOrder.length;
     const correctCount = Object.values(correctAnswers).filter(Boolean).length;
@@ -132,11 +135,23 @@ export default function Lesson() {
 
     const handleSubmit = () => {
         const isCorrect = selectedAnswer === correctAnswer;
+        console.log('Answer submitted:', { selectedAnswer, correctAnswer, isCorrect });
         setCorrectAnswers((prev) => ({
             ...prev,
             [currentQuestionIndex]: isCorrect,
         }));
         setSubmitted(true);
+        
+        // Show success animation if answer is correct
+        if (isCorrect) {
+            console.log('Correct answer! Showing animation...');
+            setShowSuccessAnimation(true);
+            // Hide animation after 2 seconds
+            setTimeout(() => {
+                console.log('Hiding animation...');
+                setShowSuccessAnimation(false);
+            }, 2000);
+        }
     };
 
     const handleNext = () => {
@@ -147,14 +162,36 @@ export default function Lesson() {
 
     // Determine top bar colors
     const topBarColors = Array.from({ length: totalQuestions }).map((_, i) => {
-        if (i === currentQuestionIndex) return "blue"; // current question
-        if (correctAnswers[i] === true) return "green"; // answered correct
-        if (correctAnswers[i] === false) return "red"; // answered wrong
-        return "lightgray"; // unanswered
+        if (i === currentQuestionIndex) return "#22c55e"; // current question - green
+        if (correctAnswers[i] === true) return "#16a34a"; // answered correct - darker green
+        if (correctAnswers[i] === false) return "#ef4444"; // answered wrong - red
+        return "#e5e7eb"; // unanswered - light gray
     });
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        <div className="min-h-screen bg-white relative">
+            {/* Success Animation Overlay */}
+            {showSuccessAnimation && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+                    <div className="relative">
+                        <dotlottie-wc 
+                            src="/hackumbccorrect.lottie" 
+                            style={{width: "300px", height: "300px"}} 
+                            autoplay
+                        ></dotlottie-wc>
+                    </div>
+                </div>
+            )}
+
+            {/* Close button */}
+            <button
+                onClick={() => navigate("/learn")}
+                className="absolute top-4 right-4 bg-red-500 text-white border-2 border-red-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm cursor-pointer transition-all duration-200 shadow-[0_3px_0_rgb(220,38,38)] hover:bg-red-600 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(185,28,28)] active:translate-y-[2px] active:shadow-[0_1px_0_rgb(185,28,28)] z-10"
+            >
+                ✕
+            </button>
+
+            <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             {/* Top: Progress bars */}
             <div
                 style={{
@@ -173,7 +210,7 @@ export default function Lesson() {
                             height: "16px",
                             flex: 1,
                             borderRadius: "8px",
-                            border: i === currentQuestionIndex ? "2px solid black" : "none",
+                            border: i === currentQuestionIndex ? "2px solid #16a34a" : "none",
                             backgroundColor: color,
                         }}
                     />
@@ -193,7 +230,7 @@ export default function Lesson() {
                 {lessonData.questionType == 'multipleChoice' ? (
                     <>
                         {/* Question type */}
-                        <h2 style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "32px" }}>
+                        <h2 className="text-3xl font-bold mb-8 text-gray-800">
                             Choose the correct answer.
                         </h2>
 
@@ -216,30 +253,15 @@ export default function Lesson() {
                             }}
                         >
                             {answerOptions.map((option) => (
-                                <button
+                                <Button
                                     key={option}
                                     onClick={() => !submitted && setSelectedAnswer(option)}
-                                    style={{
-                                        padding: "12px 20px",
-                                        fontSize: "18px",
-                                        fontWeight: "bold",
-                                        color: "blue",
-                                        backgroundColor: "white",
-                                        border: "2px solid blue", // thin outline on sides/top
-                                        borderBottomWidth: "6px", // thick bottom border
-                                        borderRadius: "12px", // rounded corners
-                                        cursor: submitted ? "default" : "pointer",
-                                        transition: "all 0.2s ease",
-                                    }}
-                                    onMouseEnter={(e) =>
-                                        (e.currentTarget.style.backgroundColor = "#f0f8ff")
-                                    }
-                                    onMouseLeave={(e) =>
-                                        (e.currentTarget.style.backgroundColor = "white")
-                                    }
+                                    disabled={submitted}
+                                    variant={selectedAnswer === option ? "default" : "outline"}
+                                    className="text-lg font-bold px-6 py-3 min-w-[80px]"
                                 >
                                     {option.toUpperCase()}
-                                </button>
+                                </Button>
                             ))}
                         </div>
 
@@ -253,81 +275,51 @@ export default function Lesson() {
             </div>
 
             {/* Bottom bar */}
-            {/* Bottom bar */}
             <div
-                style={{
-                    padding: "16px",
-                    borderTop: "1px solid #ddd",
-                    backgroundColor:
-                        submitted && selectedAnswer === correctAnswer
-                            ? "green"
-                            : submitted && selectedAnswer !== correctAnswer
-                                ? "red"
-                                : "#ffffff",
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: "16px",
-                }}
+                className={`p-4 border-t border-gray-200 flex justify-center gap-4 ${
+                    submitted && selectedAnswer === correctAnswer
+                        ? "bg-green-50"
+                        : submitted && selectedAnswer !== correctAnswer
+                            ? "bg-red-50"
+                            : "bg-white"
+                }`}
             >
                 {!submitted ? (
-                    <button
+                    <Button
                         onClick={handleSubmit}
                         disabled={!selectedAnswer}
-                        style={{
-                            padding: "12px 24px",
-                            backgroundColor: selectedAnswer ? "blue" : "gray",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "8px",
-                            cursor: selectedAnswer ? "pointer" : "not-allowed",
-                        }}
+                        variant={selectedAnswer ? "default" : "secondary"}
+                        size="lg"
                     >
                         Submit
-                    </button>
+                    </Button>
                 ) : currentQuestionIndex < totalQuestions - 1 ? (
-                    <button
+                    <Button
                         onClick={handleNext}
-                        style={{
-                            padding: "12px 24px",
-                            backgroundColor: "blue",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                        }}
+                        variant="default"
+                        size="lg"
                     >
                         Next
-                    </button>
+                    </Button>
                 ) : (
                     <>
-                        <button
+                        <Button
                             onClick={() => navigate("/learn")}
-                            style={{
-                                padding: "12px 24px",
-                                backgroundColor: "blue",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                            }}
+                            variant="default"
+                            size="lg"
                         >
                             Go to Learn
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             onClick={() => window.location.reload()}
-                            style={{
-                                padding: "12px 24px",
-                                backgroundColor: "gray",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                            }}
+                            variant="secondary"
+                            size="lg"
                         >
                             Retry Lesson
-                        </button>
+                        </Button>
                     </>
                 )}
+            </div>
             </div>
         </div>
     );
