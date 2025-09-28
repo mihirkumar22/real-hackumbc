@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Form, ListGroup, Alert, Image } from "react-bootstrap";
+import { Card, Form, ListGroup, Alert, Image } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { useUserContext } from "../contexts/UserContext";
+import { Button } from "../components/ui/button";
 import { db } from "../firebase";
 import { collection, query, where, getDocs, doc, updateDoc, getDoc } from "firebase/firestore";
 import emailjs from "emailjs-com";

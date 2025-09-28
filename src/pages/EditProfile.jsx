@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { useUserContext } from "../contexts/UserContext";
 import { useAuth } from "../contexts/AuthContext";
 import CustomNavbar from "../components/CustomNavbar";
+import { Button } from "../components/ui/button";
 import defaultProfilePic from "../components/images/default-profile.png";
 import "./EditProfile.css";
 

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import { useUserContext } from "../contexts/UserContext";
 import CustomNavBar from "../components/CustomNavbar";
-import backgroundImage from "../components/images/tree-bg.png";
 import { useNavigate } from "react-router-dom";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { Button } from "../components/ui/button";
 
 import {
     Chart as ChartJS,
@@ -144,7 +143,7 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="dashboard-container" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
+        <div className="dashboard-container">
             <CustomNavBar />
 
             <div className="dashboard-content">
@@ -175,16 +174,16 @@ export default function Dashboard() {
                         {/* Chart Type Toggle */}
                         <div className="chart-type-buttons">
                             <Button
-                                className={`chart-type-btn ${chartType === "line" ? "active" : ""}`}
+                                variant={chartType === "line" ? "default" : "secondary"}
                                 onClick={() => setChartType("line")}
-                                style={{ backgroundColor: chartType === "line" ? '#22c55e' : '#6b7280', border: 'none' }}
+                                className="chart-type-btn"
                             >
                                 Line Chart
                             </Button>
                             <Button
-                                className={`chart-type-btn ${chartType === "bar" ? "active" : ""}`}
+                                variant={chartType === "bar" ? "default" : "secondary"}
                                 onClick={() => setChartType("bar")}
-                                style={{ backgroundColor: chartType === "bar" ? '#22c55e' : '#6b7280', border: 'none' }}
+                                className="chart-type-btn"
                             >
                                 Bar Chart
                             </Button>
@@ -192,23 +191,23 @@ export default function Dashboard() {
 
                         <div className="time-range-buttons">
                             <Button
-                                className={`time-range-btn ${timeRange === "week" ? "active" : ""}`}
+                                variant={timeRange === "week" ? "default" : "secondary"}
                                 onClick={() => setTimeRange("week")}
-                                style={{ backgroundColor: timeRange === "week" ? '#22c55e' : '#6b7280', border: 'none' }}
+                                className="time-range-btn"
                             >
                                 Past Week
                             </Button>
                             <Button
-                                className={`time-range-btn ${timeRange === "month" ? "active" : ""}`}
+                                variant={timeRange === "month" ? "default" : "secondary"}
                                 onClick={() => setTimeRange("month")}
-                                style={{ backgroundColor: timeRange === "month" ? '#22c55e' : '#6b7280', border: 'none' }}
+                                className="time-range-btn"
                             >
                                 Past Month
                             </Button>
                             <Button
-                                className={`time-range-btn ${timeRange === "year" ? "active" : ""}`}
+                                variant={timeRange === "year" ? "default" : "secondary"}
                                 onClick={() => setTimeRange("year")}
-                                style={{ backgroundColor: timeRange === "year" ? '#22c55e' : '#6b7280', border: 'none' }}
+                                className="time-range-btn"
                             >
                                 Past Year
                             </Button>
@@ -224,16 +223,18 @@ export default function Dashboard() {
 
                         <div className="dashboard-buttons">
                             <Button
-                                className="dashboard-btn"
+                                variant="default"
                                 onClick={() => navigate("/learn")}
-                                style={{ backgroundColor: '#22c55e', border: 'none', padding: '12px 24px', borderRadius: '10px', fontWeight: 'bold' }}
+                                className="dashboard-btn"
+                                size="lg"
                             >
                                 Continue Learning 📚
                             </Button>
                             <Button
-                                className="dashboard-btn"
+                                variant="secondary"
                                 onClick={() => navigate("/edit-profile")}
-                                style={{ backgroundColor: '#6b7280', border: 'none', padding: '12px 24px', borderRadius: '10px', fontWeight: 'bold' }}
+                                className="dashboard-btn"
+                                size="lg"
                             >
                                 Edit Profile 👤
                             </Button>
