@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from './button'
 import { ArrowRight, Mail, Send, Play, Trophy, Users, BookOpen, Camera, Target, Star, Quote } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import BeanstalkImage from '../landing/durr.webp'
 import { EvervaultCard, Icon } from './evervault-card'
@@ -16,6 +16,19 @@ const menuItems = [
 
 export function HeroSection() {
     const [menuState, setMenuState] = useState(false)
+    const [email, setEmail] = useState('')
+    const navigate = useNavigate()
+
+    const handleEmailSubmit = (e) => {
+        e.preventDefault()
+        if (email && email.includes('@')) {
+            navigate('/register')
+        }
+    }
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value)
+    }
     
     return (
         <>
@@ -32,9 +45,9 @@ export function HeroSection() {
                             <Link
                                 to="/"
                                 aria-label="home"
-                                className="flex items-center space-x-2">
-                                <div className="text-2xl">🌱</div>
-                                <span className="text-xl font-bold text-green-600">Beanstalk</span>
+                                className="flex items-center space-x-2 px-2 py-1 rounded-md bg-green-500 text-white border-2 border-green-600 shadow-[0_6px_0_rgb(21,128,61)] hover:bg-green-600 hover:border-green-700 hover:shadow-[0_4px_0_rgb(20,83,45)] hover:translate-y-[2px] active:translate-y-[4px] active:shadow-[0_2px_0_rgb(20,83,45)] transition-all duration-200 transform translate-y-0">
+                                <div className="text-lg">🌱</div>
+                                <span className="text-sm font-bold">Beanstalk</span>
                             </Link>
 
                             {/* Action buttons - Right aligned */}
@@ -66,15 +79,9 @@ export function HeroSection() {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 className="relative z-10 mx-auto max-w-2xl text-center lg:ml-0 lg:w-1/2 lg:text-left">
-                                <div
-                                    className="rounded-lg mx-auto flex w-fit items-center gap-2 border border-green-200 p-1 pr-3 lg:ml-0 bg-green-50">
-                                    <span className="bg-green-500 rounded px-2 py-1 text-xs text-white">New</span>
-                                    <span className="text-sm text-green-700">Learn ASL with Beanstalk</span>
-                                    <ArrowRight className="size-4 text-green-600" />
-                                </div>
 
-                                <h1 className="mt-10 text-balance text-4xl font-bold text-gray-800 md:text-5xl xl:text-6xl">
-                                    The Fun Way to Learn American Sign Language
+                                <h1 className="mt-10 text-balance text-5xl font-bold text-gray-800 md:text-6xl xl:text-7xl">
+                                    The <span className="text-green-600">Fun Way</span> to Learn American Sign Language
                                 </h1>
                                 <p className="mt-8 text-lg text-gray-600">
                                     Master ASL with interactive lessons, real-time AI feedback from your camera, and a learning path that grows with you.
@@ -82,7 +89,7 @@ export function HeroSection() {
 
                                 <div>
                                     <form
-                                        action=""
+                                        onSubmit={handleEmailSubmit}
                                         className="mx-auto my-10 max-w-md lg:my-12 lg:ml-0 lg:mr-auto">
                                         <div className="bg-white has-[input:focus]:ring-green-500/50 relative grid grid-cols-[1fr_auto] items-center rounded-[1rem] border border-green-200 pr-1 shadow-lg has-[input:focus]:ring-2">
                                             <Mail className="text-gray-400 pointer-events-none absolute inset-y-0 left-5 my-auto size-5" />
@@ -91,10 +98,14 @@ export function HeroSection() {
                                                 placeholder="Enter your email"
                                                 className="h-14 w-full bg-transparent pl-12 text-gray-800 placeholder-gray-400 focus:outline-none"
                                                 type="email"
+                                                value={email}
+                                                onChange={handleEmailChange}
+                                                required
                                             />
 
-                                            <div className="md:pr-1.5 lg:pr-0">
+                                            <div className="md:pr-1.5 lg:pr-0 pb-1 ml-2">
                                                 <Button
+                                                    type="submit"
                                                     aria-label="submit"
                                                     className="bg-green-500 hover:bg-green-600 text-white"
                                                 >
@@ -383,7 +394,8 @@ export function HeroSection() {
                         </p>
                         <Button
                             size="lg"
-                            className="bg-white text-green-500 hover:bg-gray-100 text-lg px-8 py-4 rounded-full"
+                            className="bg-green-500 hover:bg-green-600 text-white text-lg px-8 py-4"
+                            onClick={() => navigate('/register')}
                         >
                             Start Learning Free
                         </Button>

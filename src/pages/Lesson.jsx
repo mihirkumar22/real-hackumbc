@@ -40,7 +40,7 @@ async function fetchLesson(unit, lesson) {
 export default function Lesson() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { unit = 1, lesson = 1 } = location.state || {};
+    const { unit , lesson } = location.state || {};
     const [lessonData, setLessonData] = useState(null);
     const [questionOrder, setQuestionOrder] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -253,6 +253,7 @@ export default function Lesson() {
             </div>
 
             {/* Bottom bar */}
+            {/* Bottom bar */}
             <div
                 style={{
                     padding: "16px",
@@ -265,19 +266,23 @@ export default function Lesson() {
                                 : "#ffffff",
                     display: "flex",
                     justifyContent: "center",
-                    gap: "16px", // spacing between buttons
+                    gap: "16px",
                 }}
             >
                 {!submitted ? (
-                    <button key={option} onClick={() => !submitted && setSelectedAnswer(option)} style={{
-                        padding: "12px",
-                        backgroundColor: submitted && option === correctAnswer ?
-                            "green" : submitted && option === selectedAnswer ?
-                                "red" : selectedAnswer === option ?
-                                    "#ddd" : "#eee", border: "1px solid #ccc",
-                        borderRadius: "8px", cursor: submitted ? "default" : "pointer",
-                    }} >
-                        {option.toUpperCase()}
+                    <button
+                        onClick={handleSubmit}
+                        disabled={!selectedAnswer}
+                        style={{
+                            padding: "12px 24px",
+                            backgroundColor: selectedAnswer ? "blue" : "gray",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "8px",
+                            cursor: selectedAnswer ? "pointer" : "not-allowed",
+                        }}
+                    >
+                        Submit
                     </button>
                 ) : currentQuestionIndex < totalQuestions - 1 ? (
                     <button

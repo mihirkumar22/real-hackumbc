@@ -1,15 +1,11 @@
 import React, { useState, useRef } from 'react';
-import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import BG from '../components/images/tree-bg.png';
+import './Login.css';
 
-export default function Login () {
-    const [ loading, setLoading ] = useState(false);
-    const [ error, setError ] = useState('');
+export default function Login() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -34,41 +30,67 @@ export default function Login () {
     }
 
     return (
-        <div style={{ backgroundImage: `url(${BG})`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', padding: '20px' }}>
-                <Card style={{ width: '100%', maxWidth: '400px', borderRadius: '10px', boxShadow: "0 4px 10px rgba(0, 0, 0, 0.6)", border: 'none', backgroundColor: 'rgba(255, 255, 255, .6)' }}>
-                    <Card.Body>
-                        <Card.Title style={{ textAlign: 'center', fontWeight: 'bold', color:'darkgreen', }}>LOGIN</Card.Title>
-                        {error && <Alert variant="danger">{error}</Alert>}
-                        <Form onSubmit={handleSubmit} >
-                            <Form.Group id="email" style={{ marginBottom: '15px' }}>
-                                <Form.Label><b>Email Address</b></Form.Label>
-                                <Form.Control type="email" placeholder="Enter email" ref={emailRef} />
-                            </Form.Group>
-                            <Form.Group id="password" style={{ marginBottom: '15px' }}>
-                                <Form.Label><b>Enter Password</b></Form.Label>
-                                <Form.Control type="password" placeholder="Enter password" ref={passwordRef} />
-                            </Form.Group>
-                            <Button 
-                                type="submit" disabled={loading} style={{ width: '100%', marginTop: '15px',
-
-                                    backgroundColor: '#28a745', 
-                                    borderColor: '#28a745',
-                                    padding: '10px 0', 
-                                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.4)",
-                                }}
-                                onMouseEnter={(e) => (e.target.style.backgroundColor = '#218838')} // Dark green on hover
-                                onMouseLeave={(e) => (e.target.style.backgroundColor = '#28a745')} // Reset to green on hover out
-                            >
-                                {loading ? "Loading..." : "Submit"}
-                            </Button>
-                        </Form>
-                        <Card.Text style={{ textAlign: 'center', marginTop: '15px' }}>
-                            <b >Don't have an account?</b> <Link to="/register" style={{color: 'darkGreen'}} onMouseEnter={(e) => (e.target.style.color = '#218838')} onMouseLeave={(e) => (e.target.style.color = 'darkGreen')}><b> Create Account </b></Link>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+        <div className="login-container">
+            <div className="form-container">
+                <p className="title">Login</p>
+                {error && <div className="error-message">{error}</div>}
+                <form className="form" onSubmit={handleSubmit}>
+                    <div className="input-group">
+                        <label htmlFor="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            id="email" 
+                            placeholder="Enter your email"
+                            ref={emailRef}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="password">Password</label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="password" 
+                            placeholder="Enter your password"
+                            ref={passwordRef}
+                            required
+                        />
+                                <div className="forgot">
+                                    <Link to="/forgot-password" rel="noopener noreferrer">Forgot Password?</Link>
+                                </div>
+                    </div>
+                    <button className="sign" type="submit" disabled={loading}>
+                        {loading ? "Signing in..." : "Sign in"}
+                    </button>
+                </form>
+                <div className="social-message">
+                    <div className="line" />
+                    <p className="message">Login with social accounts</p>
+                    <div className="line" />
+                </div>
+                <div className="social-icons">
+                    <button aria-label="Log in with Google" className="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
+                            <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z" />
+                        </svg>
+                    </button>
+                    <button aria-label="Log in with Twitter" className="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
+                            <path d="M31.937 6.093c-1.177 0.516-2.437 0.871-3.765 1.032 1.355-0.813 2.391-2.099 2.885-3.631-1.271 0.74-2.677 1.276-4.172 1.579-1.192-1.276-2.896-2.079-4.787-2.079-3.625 0-6.563 2.937-6.563 6.557 0 0.521 0.063 1.021 0.172 1.495-5.453-0.255-10.287-2.875-13.52-6.833-0.568 0.964-0.891 2.084-0.891 3.303 0 2.281 1.161 4.281 2.916 5.457-1.073-0.031-2.083-0.328-2.968-0.817v0.079c0 3.181 2.26 5.833 5.26 6.437-0.547 0.145-1.131 0.229-1.724 0.229-0.421 0-0.823-0.041-1.224-0.115 0.844 2.604 3.26 4.5 6.14 4.557-2.239 1.755-5.077 2.801-8.135 2.801-0.521 0-1.041-0.025-1.563-0.088 2.917 1.86 6.36 2.948 10.079 2.948 12.067 0 18.661-9.995 18.661-18.651 0-0.276 0-0.557-0.021-0.839 1.287-0.917 2.401-2.079 3.281-3.396z" />
+                        </svg>
+                    </button>
+                    <button aria-label="Log in with GitHub" className="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
+                            <path d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z" />
+                        </svg>
+                    </button>
+                </div>
+                <p className="signup">
+                    Don't have an account?
+                    <Link to="/register" className="signup-link">Sign up</Link>
+                </p>
             </div>
         </div>
-    )
+    );
 }
