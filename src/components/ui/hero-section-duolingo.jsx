@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from './button'
-import { ArrowRight, Mail, Menu, Send, X, Play, Trophy, Users, BookOpen, Camera, Target, Star, Quote } from 'lucide-react'
+import { ArrowRight, Mail, Send, Play, Trophy, Users, BookOpen, Camera, Target, Star, Quote } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import BeanstalkImage from '../landing/durr.webp'
@@ -11,10 +11,7 @@ import { AnimatedTabs } from './animated-tabs'
 import Footer4Col from './footer-column'
 
 const menuItems = [
-    { name: 'Learn', href: '#learn' },
-    { name: 'Practice', href: '#practice' },
-    { name: 'Progress', href: '#progress' },
-    { name: 'About', href: '#about' },
+    // Navigation items hidden as requested
 ]
 
 export function HeroSection() {
@@ -28,56 +25,32 @@ export function HeroSection() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                     data-state={menuState && 'active'}
-                    className="group fixed z-20 w-full border-b border-green-200 bg-white/95 backdrop-blur md:relative lg:bg-transparent">
-                    <div className="m-auto max-w-6xl px-6">
-                        <div className="flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
-                            <div className="flex w-full justify-between lg:w-auto">
-                                <Link
-                                    to="/"
-                                    aria-label="home"
-                                    className="flex items-center space-x-2">
-                                    <div className="text-2xl">🌱</div>
-                                    <span className="text-xl font-bold text-green-600">Beanstalk</span>
-                                </Link>
+                    className="group fixed z-20 w-full bg-white/80 backdrop-blur-md">
+                    <div className="w-full px-6">
+                        <div className="flex w-full items-center justify-between py-4">
+                            {/* Logo - Left aligned */}
+                            <Link
+                                to="/"
+                                aria-label="home"
+                                className="flex items-center space-x-2">
+                                <div className="text-2xl">🌱</div>
+                                <span className="text-xl font-bold text-green-600">Beanstalk</span>
+                            </Link>
 
-                                <button
-                                    onClick={() => setMenuState(!menuState)}
-                                    aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
-                                    className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden">
-                                    <Menu className="group-data-[state=active]:rotate-180 group-data-[state=active]:scale-0 group-data-[state=active]:opacity-0 m-auto size-6 duration-200 text-green-600" />
-                                    <X className="group-data-[state=active]:rotate-0 group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200 text-green-600" />
-                                </button>
-                            </div>
+                            {/* Action buttons - Right aligned */}
+                            <div className="flex items-center gap-3">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="border-green-300 text-green-600 hover:bg-green-50">
+                                    <Link to="/login">Login</Link>
+                                </Button>
 
-                            <div className="bg-white group-data-[state=active]:block lg:group-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border border-green-200 p-6 shadow-lg md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none">
-                                <div className="lg:pr-4">
-                                    <ul className="space-y-6 text-base lg:flex lg:gap-8 lg:space-y-0 lg:text-sm">
-                                        {menuItems.map((item, index) => (
-                                            <li key={index}>
-                                                <Link
-                                                    to={item.href}
-                                                    className="text-green-600 hover:text-green-700 block duration-150">
-                                                    <span>{item.name}</span>
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit lg:border-l border-green-200 lg:pl-6">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="border-green-300 text-green-600 hover:bg-green-50">
-                                        <Link to="/login">Login</Link>
-                                    </Button>
-
-                                    <Button
-                                        size="sm"
-                                        className="bg-green-500 hover:bg-green-600 text-white">
-                                        <Link to="/register">Get Started</Link>
-                                    </Button>
-                                </div>
+                                <Button
+                                    size="sm"
+                                    className="bg-green-500 hover:bg-green-600 text-white">
+                                    <Link to="/register">Get Started</Link>
+                                </Button>
                             </div>
                         </div>
                     </div>
