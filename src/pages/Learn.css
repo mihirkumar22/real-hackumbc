@@ -272,122 +272,20 @@
 @media (max-width: 768px) {
   .learn {
     margin-left: 0;
-    margin-right: 0;
-  }
-  
-  .right-sidebar {
-    display: none;
   }
   
   .learn-node-container {
     margin-left: 0;
-    padding: 15px;
   }
   
   .learn-floor {
-    width: 95%;
-    left: 2.5%;
+    width: 90%;
+    left: 5%;
     transform: none;
-    bottom: 20px;
   }
   
   .lesson-node {
     width: 70px;
     height: 70px;
-    margin: 12px 0;
-  }
-  
-  .unit-notification {
-    width: 95%;
-    left: 2.5%;
-    transform: none;
-    padding: 10px 20px;
-    font-size: 13px;
-  }
-  
-  .unit-notification .unit-title {
-    font-size: 14px;
-  }
-  
-  .unit-notification .unit-progress {
-    font-size: 11px;
-  }
-  
-  .cloud {
-    max-width: 350px;
-    margin: 12px 0;
-  }
-  
-  .practice-btn {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-  
-  .floor-close-btn {
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .learn-node-container {
-    padding: 10px;
-  }
-  
-  .lesson-node {
-    width: 60px;
-    height: 60px;
-    margin: 10px 0;
-  }
-  
-  .learn-floor {
-    width: 98%;
-    left: 1%;
-    padding: 20px 16px 16px 16px;
-    min-height: 180px;
-  }
-  
-  .learn-floor h3 {
-    font-size: 20px;
-    margin-bottom: 8px;
-  }
-  
-  .learn-floor p {
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
-  
-  .unit-notification {
-    width: 98%;
-    left: 1%;
-    padding: 8px 16px;
-    font-size: 12px;
-  }
-  
-  .unit-notification .unit-title {
-    font-size: 13px;
-  }
-  
-  .unit-notification .unit-progress {
-    font-size: 10px;
-  }
-  
-  .cloud {
-    max-width: 300px;
-    margin: 10px 0;
-  }
-  
-  .practice-btn {
-    padding: 8px 16px;
-    font-size: 13px;
-  }
-  
-  .floor-close-btn {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-    top: 8px;
-    right: 8px;
   }
 }

@@ -4,7 +4,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useUserContext } from "../contexts/UserContext";
 import { Button } from "../components/ui/button";
-import "./Lesson.css";
 // Using dotlottie web component instead
 
 import aImg from "../components/images/a.png";
@@ -173,7 +172,7 @@ export default function Lesson() {
         <div className="min-h-screen bg-white relative">
             {/* Success Animation Overlay */}
             {showSuccessAnimation && (
-                <div className="success-animation-overlay fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+                <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
                     <div className="relative">
                         <dotlottie-wc 
                             src="/hackumbccorrect.lottie" 
@@ -187,7 +186,7 @@ export default function Lesson() {
             {/* Close button */}
             <button
                 onClick={() => navigate("/learn")}
-                className="lesson-close-btn absolute top-4 right-4 bg-red-500 text-white border-2 border-red-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm cursor-pointer transition-all duration-200 shadow-[0_3px_0_rgb(220,38,38)] hover:bg-red-600 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(185,28,28)] active:translate-y-[2px] active:shadow-[0_1px_0_rgb(185,28,28)] z-10"
+                className="absolute top-4 right-4 bg-red-500 text-white border-2 border-red-600 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm cursor-pointer transition-all duration-200 shadow-[0_3px_0_rgb(220,38,38)] hover:bg-red-600 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(185,28,28)] active:translate-y-[2px] active:shadow-[0_1px_0_rgb(185,28,28)] z-10"
             >
                 ✕
             </button>
@@ -195,7 +194,6 @@ export default function Lesson() {
             <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             {/* Top: Progress bars */}
             <div
-                className="progress-bars-container"
                 style={{
                     display: "flex",
                     justifyContent: "center",
@@ -232,7 +230,7 @@ export default function Lesson() {
                 {lessonData.questionType == 'multipleChoice' ? (
                     <>
                         {/* Question type */}
-                        <h2 className="lesson-question-title text-3xl font-bold mb-8 text-gray-800">
+                        <h2 className="text-3xl font-bold mb-8 text-gray-800">
                             Choose the correct answer.
                         </h2>
 
@@ -240,12 +238,11 @@ export default function Lesson() {
                         <img
                             src={imageCache[correctAnswer]}
                             alt={`Sign for ${correctAnswer}`}
-                            className="lesson-sign-image"
                             style={{ height: "200px", marginBottom: "32px" }}
                         />
 
                         {/* Answer options */}
-                        <div className="answer-options-container"
+                        <div
                             style={{
                                 display: "flex",
                                 flexDirection: "row",
@@ -282,7 +279,7 @@ export default function Lesson() {
 
             {/* Bottom bar */}
             <div
-                className={`lesson-bottom-bar p-4 border-t border-gray-200 flex justify-center gap-4 ${
+                className={`p-4 border-t border-gray-200 flex justify-center gap-4 ${
                     submitted && selectedAnswer === correctAnswer
                         ? "bg-green-50"
                         : submitted && selectedAnswer !== correctAnswer

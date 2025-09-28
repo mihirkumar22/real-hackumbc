@@ -3,7 +3,6 @@ import CustomNavbar from '../components/CustomNavbar';
 import './Learn.css';
 import cloudImg from '../components/images/cloud.png';
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from '../contexts/UserContext';
 
 // Import your lesson images
 import letter from '../components/images/letter.png';
@@ -14,7 +13,6 @@ import family from '../components/images/family.png';
 import emotion from '../components/images/emotion.png';
 import questions from '../components/images/questions.png';
 import responses from '../components/images/responses.png';
-
 
 export default function Learn() {
   const containerRef = useRef(null);
