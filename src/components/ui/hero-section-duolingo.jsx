@@ -172,87 +172,86 @@ export function HeroSection() {
                             </p>
                         </motion.div>
                         
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                            {/* Stage 1: Alphabet */}
-                            <GlowCard glowColor="green" size="lg" className="bg-white">
-                                <div className="text-center p-6">
-                                    <div className="bg-green-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <BookOpen className="w-10 h-10 text-white" />
+                        {/* Single Fat 3D Box */}
+                        <div className="relative transform translate-y-0 hover:translate-y-[-4px] transition-all duration-300">
+                            <div className="bg-white border-2 border-gray-300 shadow-[0_12px_0_rgb(156,163,175)] rounded-2xl p-8 hover:shadow-[0_8px_0_rgb(156,163,175)] transition-all duration-300">
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                    {/* Stage 1: Alphabet */}
+                                    <div className="text-center">
+                                        <div className="bg-green-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-green-600 shadow-[0_6px_0_rgb(21,128,61)] transform translate-y-0 hover:translate-y-[2px] hover:shadow-[0_4px_0_rgb(21,128,61)] transition-all duration-200">
+                                            <BookOpen className="w-10 h-10 text-white" />
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-800 mb-4">Stage 1: Alphabet</h3>
+                                        <p className="text-gray-600 mb-6 text-base leading-relaxed">
+                                            Start with the ASL alphabet through 7 interactive circles. Learn 8-9 letters per circle with visual guides and camera practice.
+                                        </p>
+                                        <div className="space-y-3">
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Visual letter recognition</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Camera-based practice</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Mastery tracking</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-800 mb-4">Stage 1: Alphabet</h3>
-                                    <p className="text-gray-600 mb-6 text-base leading-relaxed">
-                                        Start with the ASL alphabet through 7 interactive circles. Learn 8-9 letters per circle with visual guides and camera practice.
-                                    </p>
-                                    <ul className="text-sm text-gray-500 space-y-3 text-left">
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Visual letter recognition
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Camera-based practice
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Mastery tracking
-                                        </li>
-                                    </ul>
-                                </div>
-                            </GlowCard>
 
-                            {/* Stage 2: Common Terms */}
-                            <GlowCard glowColor="green" size="lg" className="bg-white">
-                                <div className="text-center p-6">
-                                    <div className="bg-green-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <Target className="w-10 h-10 text-white" />
+                                    {/* Stage 2: Common Terms */}
+                                    <div className="text-center">
+                                        <div className="bg-green-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-green-600 shadow-[0_6px_0_rgb(21,128,61)] transform translate-y-0 hover:translate-y-[2px] hover:shadow-[0_4px_0_rgb(21,128,61)] transition-all duration-200">
+                                            <Target className="w-10 h-10 text-white" />
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-800 mb-4">Stage 2: Common Terms</h3>
+                                        <p className="text-gray-600 mb-6 text-base leading-relaxed">
+                                            Build vocabulary with essential categories: colors, family, and feelings. Perfect your signing with AI feedback.
+                                        </p>
+                                        <div className="space-y-3">
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Colors & Family</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Emotions & Feelings</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Real-time feedback</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-800 mb-4">Stage 2: Common Terms</h3>
-                                    <p className="text-gray-600 mb-6 text-base leading-relaxed">
-                                        Build vocabulary with essential categories: colors, family, and feelings. Perfect your signing with AI feedback.
-                                    </p>
-                                    <ul className="text-sm text-gray-500 space-y-3 text-left">
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Colors & Family
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Emotions & Feelings
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Real-time feedback
-                                        </li>
-                                    </ul>
-                                </div>
-                            </GlowCard>
 
-                            {/* Stage 3: Conversations */}
-                            <GlowCard glowColor="green" size="lg" className="bg-white">
-                                <div className="text-center p-6">
-                                    <div className="bg-green-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <Users className="w-10 h-10 text-white" />
+                                    {/* Stage 3: Conversations */}
+                                    <div className="text-center">
+                                        <div className="bg-green-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-green-600 shadow-[0_6px_0_rgb(21,128,61)] transform translate-y-0 hover:translate-y-[2px] hover:shadow-[0_4px_0_rgb(21,128,61)] transition-all duration-200">
+                                            <Users className="w-10 h-10 text-white" />
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-800 mb-4">Stage 3: Conversations</h3>
+                                        <p className="text-gray-600 mb-6 text-base leading-relaxed">
+                                            Master practical conversations with questions and responses. Learn essential ASL phrases for daily communication.
+                                        </p>
+                                        <div className="space-y-3">
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Questions & Responses</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Daily conversations</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border-2 border-green-200 shadow-[0_3px_0_rgb(187,247,208)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_2px_0_rgb(187,247,208)] transition-all duration-200">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                <span className="font-medium">Practical phrases</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-800 mb-4">Stage 3: Conversations</h3>
-                                    <p className="text-gray-600 mb-6 text-base leading-relaxed">
-                                        Master practical conversations with questions and responses. Learn essential ASL phrases for daily communication.
-                                    </p>
-                                    <ul className="text-sm text-gray-500 space-y-3 text-left">
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Questions & Responses
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Daily conversations
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            Practical phrases
-                                        </li>
-                                    </ul>
                                 </div>
-                            </GlowCard>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -286,26 +285,36 @@ export function HeroSection() {
                                         content: (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-4">
-                                                    <div className="bg-green-500 w-16 h-16 rounded-full flex items-center justify-center">
+                                                    <div className="bg-green-500 w-16 h-16 rounded-full flex items-center justify-center border-2 border-green-600 shadow-[0_6px_0_rgb(21,128,61)] transform translate-y-0 hover:translate-y-[2px] hover:shadow-[0_4px_0_rgb(21,128,61)] transition-all duration-200">
                                                         <BookOpen className="w-8 h-8 text-white" />
                                                     </div>
                                                     <h3 className="text-2xl font-bold text-gray-800">Interactive Lessons</h3>
                                                     <p className="text-gray-600 leading-relaxed">
                                                         Learn ASL through engaging, bite-sized lessons with visual aids and step-by-step guidance designed for all skill levels.
                                                     </p>
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Visual learning aids</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Step-by-step guidance</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Adaptive difficulty</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-3">
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Visual learning aids</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Step-by-step guidance</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Adaptive difficulty</span>
+                                                <div className="flex items-center justify-center">
+                                                    <div className="relative transform translate-y-0 hover:translate-y-[-2px] transition-all duration-200">
+                                                        <img 
+                                                            src="/interactive-lessons-demo.png" 
+                                                            alt="Interactive ASL learning lessons interface" 
+                                                            className="w-full max-w-sm h-auto rounded-lg border-2 border-gray-300 shadow-[0_8px_0_rgb(156,163,175)]"
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-green-500/20 to-transparent rounded-lg"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -317,26 +326,36 @@ export function HeroSection() {
                                         content: (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-4">
-                                                    <div className="bg-green-500 w-16 h-16 rounded-full flex items-center justify-center">
+                                                    <div className="bg-green-500 w-16 h-16 rounded-full flex items-center justify-center border-2 border-green-600 shadow-[0_6px_0_rgb(21,128,61)] transform translate-y-0 hover:translate-y-[2px] hover:shadow-[0_4px_0_rgb(21,128,61)] transition-all duration-200">
                                                         <Camera className="w-8 h-8 text-white" />
                                                     </div>
                                                     <h3 className="text-2xl font-bold text-gray-800">AI-Powered Feedback</h3>
                                                     <p className="text-gray-600 leading-relaxed">
                                                         Get instant feedback on your signing accuracy using advanced computer vision technology and machine learning.
                                                     </p>
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Real-time analysis</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Accuracy scoring</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Improvement tips</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-3">
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Real-time analysis</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Accuracy scoring</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Improvement tips</span>
+                                                <div className="flex items-center justify-center">
+                                                    <div className="relative transform translate-y-0 hover:translate-y-[-2px] transition-all duration-200">
+                                                        <img 
+                                                            src="/ai-feature-phone.png" 
+                                                            alt="AI-powered ASL learning interface on smartphone" 
+                                                            className="w-full max-w-sm h-auto rounded-lg border-2 border-gray-300 shadow-[0_8px_0_rgb(156,163,175)]"
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-green-500/20 to-transparent rounded-lg"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -348,26 +367,39 @@ export function HeroSection() {
                                         content: (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-4">
-                                                    <div className="bg-green-500 w-16 h-16 rounded-full flex items-center justify-center">
+                                                    <div className="bg-green-500 w-16 h-16 rounded-full flex items-center justify-center border-2 border-green-600 shadow-[0_6px_0_rgb(21,128,61)] transform translate-y-0 hover:translate-y-[2px] hover:shadow-[0_4px_0_rgb(21,128,61)] transition-all duration-200">
                                                         <Trophy className="w-8 h-8 text-white" />
                                                     </div>
                                                     <h3 className="text-2xl font-bold text-gray-800">Progress Tracking</h3>
                                                     <p className="text-gray-600 leading-relaxed">
                                                         Track your learning journey with detailed analytics, streaks, and personalized recommendations to keep you motivated.
                                                     </p>
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Learning streaks</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Detailed analytics</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 text-sm text-gray-600 bg-white p-3 rounded-lg border-2 border-gray-200 shadow-[0_4px_0_rgb(209,213,219)] transform translate-y-0 hover:translate-y-[1px] hover:shadow-[0_3px_0_rgb(209,213,219)] transition-all duration-200">
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-green-600 shadow-[0_2px_0_rgb(21,128,61)]"></div>
+                                                            <span className="font-medium">Personalized goals</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-3">
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Learning streaks</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Detailed analytics</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                                        <span>Personalized goals</span>
+                                                <div className="flex items-center justify-center">
+                                                    <div className="relative transform translate-y-0 hover:translate-y-[-2px] transition-all duration-200">
+                                                        <div className="w-full max-w-sm h-64 bg-gradient-to-br from-green-100 to-green-200 rounded-lg border-2 border-gray-300 shadow-[0_8px_0_rgb(156,163,175)] flex items-center justify-center">
+                                                            <div className="text-center space-y-4">
+                                                                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center border-2 border-green-600 shadow-[0_4px_0_rgb(21,128,61)] mx-auto">
+                                                                    <Trophy className="w-8 h-8 text-white" />
+                                                                </div>
+                                                                <div className="text-green-700 font-bold text-lg">Progress Dashboard</div>
+                                                                <div className="text-green-600 text-sm">Coming Soon</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
