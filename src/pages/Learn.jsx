@@ -13,23 +13,29 @@ import family from '../components/images/family.png';
 import emotion from '../components/images/emotion.png';
 import questions from '../components/images/questions.png';
 import responses from '../components/images/responses.png';
+import { useUserContext } from '../contexts/UserContext';
 
 export default function Learn() {
   const containerRef = useRef(null);
   const navigate = useNavigate();
+
+  const { userData } = useUserContext();
 
   // State for selected lesson
   const [selectedLesson, setSelectedLesson] = useState(null);
 
   // Handle node click to toggle floor
   const handleNodeClick = (node) => {
-    // For now, all lessons are locked except the last one (bottom AA button)
-    const isUnlocked = node.id === '0-6'; // Only last lesson (bottom AA) is unlocked
-    
+    // Check if userData and lessonsAvailable exist
+    const availableLessons = userData?.lessonsAvailable || [];
+
+    // Determine if node is unlocked
+    const isUnlocked = availableLessons.includes(node.id);
+
     if (!isUnlocked) {
       return; // Don't allow clicking locked lessons
     }
-    
+
     if (selectedLesson && selectedLesson.id === node.id) {
       setSelectedLesson(null);
     } else {
@@ -76,14 +82,16 @@ export default function Learn() {
 
   // Split lessons into groups
   let start = 0;
-  const groups = groupSizes.map((size, g) => {
-    const nodes = lessons.slice(start, start + size).map((lesson, i) => ({
-      id: `${g}-${i}`,
+  const groups = groupSizes.map((size) => {
+    const nodes = lessons.slice(start, start + size).map((lesson) => ({
+      id: `${lesson.unit}-${lesson.lesson}`, // unit-lesson ID
       ...lesson,
     }));
     start += size;
     return { nodes };
   });
+
+
 
   useEffect(() => {
     if (containerRef.current) {
@@ -94,7 +102,7 @@ export default function Learn() {
   return (
     <div className="learn">
       <CustomNavbar />
-      
+
       {/* Unit notification card */}
       <div className="unit-notification">
         <div className="unit-icon">📚</div>
@@ -106,13 +114,14 @@ export default function Learn() {
 
       {/* Right sidebar */}
       <div className="right-sidebar"></div>
-      
+
       <div className="learn-node-container" ref={containerRef}>
         {groups.map((group, groupIdx) => (
           <div key={groupIdx} className="group">
             <img src={cloudImg} alt="Cloud" className="cloud" />
             {group.nodes.map((node, idx) => {
-              const isUnlocked = node.id === '0-6'; // Only last lesson (bottom AA) is unlocked
+              // Check if this node is unlocked by userData
+              const isUnlocked = userData?.lessonsAvailable?.includes(node.id);
               return (
                 <div
                   key={node.id}
