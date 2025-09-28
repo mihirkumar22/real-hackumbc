@@ -82,7 +82,7 @@ function EditProfile() {
                     </div>
 
                     {/* Streak Circles */}
-                    <div className="streak-container mt-3 d-flex justify-content-center gap-3">
+                    <div className="streak-container">
                         <div className="streak-circle max-streak" title="Max Streak">
                             {userData?.maxStreak || 0}
                         </div>

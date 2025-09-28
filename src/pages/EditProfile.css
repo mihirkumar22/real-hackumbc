@@ -54,13 +54,14 @@
 }
 
 .streak-circle {
-    line-height: 150px;         /* prevent shrinking inside flex */
-    width: 150px;           /* bigger bubble width */
-    height: 150px;          /* bigger bubble height */
+    line-height: 250px;         /* prevent shrinking inside flex */
+    width: 250px;           /* bigger bubble width */
+    height: 250px;          /* bigger bubble height */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
     font-size: 16px;
     font-weight: bold;
     color: white;
