@@ -3,17 +3,11 @@ import { Card, Button, Form, ListGroup, Alert, Image } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { useUserContext } from "../contexts/UserContext";
 import { db } from "../firebase";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  updateDoc,
-  getDoc,
-} from "firebase/firestore";
+import { collection, query, where, getDocs, doc, updateDoc, getDoc } from "firebase/firestore";
+import emailjs from "emailjs-com";
 import "./Social.css";
 import CustomNavbar from "../components/CustomNavbar";
+import defaultProfilePic from "../components/images/default-profile.png";
 
 export default function Social() {
   const { currentUser } = useAuth();
@@ -23,7 +17,7 @@ export default function Social() {
   const [friendsList, setFriendsList] = useState([]);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
-  const [friendDetails, setFriendDetails] = useState({}); // UID -> {name, profilePic}
+  const [friendDetails, setFriendDetails] = useState({}); // Map UID -> { name, profilePic, streaks }
 
   // Load friends list from userData
   useEffect(() => {
@@ -36,7 +30,7 @@ export default function Social() {
     }
   }, [userData]);
 
-  // Fetch friend details (name + profilePic)
+  // Fetch friend details by UID
   async function fetchFriendDetails(friendUids) {
     const details = {};
     for (const uid of friendUids) {
@@ -46,14 +40,16 @@ export default function Social() {
         const data = docSnap.data();
         details[uid] = {
           name: data.userName || data.email,
-          profilePic: data.profilePic || "/default-pfp.png", // fallback image
+          profilePic: data.profilePic || defaultProfilePic,
+          maxStreak: data.maxStreak || 0,
+          currentStreak: data.currentStreak || 0,
         };
       }
     }
     setFriendDetails(details);
   }
 
-  // Add friend by email
+  // Add friend by email and send EmailJS invite
   async function handleAddFriend() {
     setMessage(null);
     setError(null);
@@ -96,7 +92,9 @@ export default function Social() {
         ...prev,
         [friendUid]: {
           name: friendData.userName || friendData.email,
-          profilePic: friendData.profilePic || "/default-pfp.png",
+          profilePic: friendData.profilePic || defaultProfilePic,
+          maxStreak: friendData.maxStreak || 0,
+          currentStreak: friendData.currentStreak || 0,
         },
       }));
 
@@ -106,20 +104,25 @@ export default function Social() {
       if (friendDocSnap.exists()) {
         const friendFriends = friendDocSnap.data().friends || [];
         if (!friendFriends.includes(currentUser.uid)) {
-          await updateDoc(friendRef, {
-            friends: [...friendFriends, currentUser.uid],
-          });
+          await updateDoc(friendRef, { friends: [...friendFriends, currentUser.uid] });
         }
       }
 
-      // Call cloud function to send invite email
-      await fetch(
-        `https://us-central1-YOUR_PROJECT_ID.cloudfunctions.net/sendFriendInvite?to=${emailInput}&from=${currentUser.email}`
-      );
+      // Send EmailJS invite
+      emailjs
+        .send(
+          "service_xq5ji2p",
+          "template_tu2xzkj",
+          {
+            to_email: friendData.email,
+            from_name: userData.userName || currentUser.email,
+          },
+          "Gs_Z9j0cHQFV_1H_m"
+        )
+        .then(() => console.log("Email sent successfully"))
+        .catch((err) => console.error("EmailJS error:", err));
 
-      setMessage(
-        `Friend added successfully: ${friendData.userName || friendData.email}`
-      );
+      setMessage(`Friend added successfully: ${friendData.userName || friendData.email}`);
       setEmailInput("");
     } catch (err) {
       console.error(err);
@@ -150,28 +153,20 @@ export default function Social() {
             </Button>
           </Form>
 
-          <ListGroup className="friend-list">
-            {friendsList.length === 0 && (
-              <ListGroup.Item>No friends yet.</ListGroup.Item>
-            )}
+          <ListGroup>
+            {friendsList.length === 0 && <ListGroup.Item>No friends yet.</ListGroup.Item>}
             {friendsList.map((uid) => {
-              const friend = friendDetails[uid];
-              return (
+              const details = friendDetails[uid];
+              return details ? (
                 <ListGroup.Item key={uid} className="friend-item">
-                  <div className="friend-row">
-                    <Image
-                      src={friend?.profilePic}
-                      roundedCircle
-                      className="friend-pfp"
-                    />
-                    <span className="friend-name">{friend?.name || uid}</span>
-                    <div className="friend-streaks">
-                      <span className="streak-circle"></span>
-                      <span className="streak-circle"></span>
-                    </div>
+                  <Image src={details.profilePic} roundedCircle className="friend-pic" />
+                  <span className="friend-name">{details.name}</span>
+                  <div className="friend-streaks">
+                    <div className="streak-circle max" title="Max Streak"></div>
+                    <div className="streak-circle current" title="Current Streak"></div>
                   </div>
                 </ListGroup.Item>
-              );
+              ) : null;
             })}
           </ListGroup>
         </Card.Body>
