@@ -1,123 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { Card, Form, Button } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from "react";
+import { Card, Button } from "react-bootstrap";
 import { useUserContext } from "../contexts/UserContext";
-import BG from "../components/images/regbg.jpg";
+import { useAuth } from "../contexts/AuthContext";
+import CustomNavbar from "../components/CustomNavbar";
+import defaultProfilePic from "../components/images/default-profile.png";
+import "./EditProfile.css";
 
 function EditProfile() {
-    const { loading, userData, updateUserData } = useUserContext();
-    const [editing, setEditing] = useState(false);
-    const [saving, setSaving] = useState(false);
+    const { loading, userData } = useUserContext();
+    const { currentUser, updateUserProfile } = useAuth();
     const [formData, setFormData] = useState({
         userName: "",
-        phoneNumber: "",
-        location: "",
-        bio: ""
+        profilePic: ""
     });
+    const fileInputRef = useRef();
 
     useEffect(() => {
         if (userData) {
             setFormData({
                 userName: userData.userName || "",
-                phoneNumber: userData.phoneNumber || "",
-                location: userData.location || "",
-                bio: userData.bio || ""
+                profilePic: userData.profilePic || defaultProfilePic
             });
         }
     }, [userData]);
 
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    }
-
-    async function handleSave() {
-        if (editing) setSaving(true);
-        setEditing((prev) => !prev);
-        try {
-            await updateUserData(formData);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setSaving(false);
-        }
-    }
-
     if (loading) return <Card.Text>Loading...</Card.Text>;
 
+    // Handle profile pic change
+    const handleProfilePicChange = async (file) => {
+        if (!file) return;
+        try {
+            const newProfilePicUrl = await updateUserProfile(currentUser.uid, formData, file);
+            setFormData((prev) => ({ ...prev, profilePic: newProfilePicUrl }));
+        } catch (err) {
+            console.error("Failed to update profile pic:", err);
+        }
+    };
+
+    // Handle username change
+    const handleUsernameChange = async () => {
+        const newUsername = prompt("Enter new username:", formData.userName);
+        if (!newUsername || newUsername === formData.userName) return;
+
+        try {
+            await updateUserProfile(currentUser.uid, { ...formData, userName: newUsername });
+            setFormData((prev) => ({ ...prev, userName: newUsername }));
+        } catch (err) {
+            console.error("Failed to update username:", err);
+        }
+    };
+
     return (
-        <div
-            style={{
-                background: `url(${BG}) center/cover no-repeat`,
-                minHeight: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-            }}
-        >
-            <Card
-                style={{
-                    width: "90vh",
-                    padding: "20px",
-                    borderRadius: "10px",
-                    background: "rgba(255, 255, 255, 0.75)",
-                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.6)",
-                    border: "none"
-                }}
-            >
+        <div className="profile-container">
+            <CustomNavbar />
+            <Card className="profile-card text-center">
                 <Card.Body>
-                    <Form>
-                        <Form.Group>
-                            <Form.Label><b>Your Name</b></Form.Label>
-                            <Form.Control
-                                name="userName"
-                                value={formData.userName}
-                                onChange={handleChange}
-                                disabled={!editing}
-                            />
-                        </Form.Group>
-                        <br />
-                        <Form.Group>
-                            <Form.Label><b>Phone Number</b></Form.Label>
-                            <Form.Control
-                                name="phoneNumber"
-                                value={formData.phoneNumber}
-                                onChange={handleChange}
-                                disabled={!editing}
-                            />
-                        </Form.Group>
-                        <br />
-                        <Form.Group>
-                            <Form.Label><b>Location</b></Form.Label>
-                            <Form.Control
-                                name="location"
-                                value={formData.location}
-                                onChange={handleChange}
-                                disabled={!editing}
-                            />
-                        </Form.Group>
-                        <br />
-                        <Form.Group>
-                            <Form.Label><b>About You</b></Form.Label>
-                            <Form.Control
-                                name="bio"
-                                as="textarea"
-                                value={formData.bio}
-                                onChange={handleChange}
-                                disabled={!editing}
-                            />
-                        </Form.Group>
+                    {/* Profile Picture */}
+                    <div className="profile-pic-container">
+                        <img
+                            src={formData.profilePic || defaultProfilePic}
+                            alt="Profile"
+                            className="profile-pic"
+                        />
+                        {/* Hidden file input */}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            style={{ display: "none" }}
+                            onChange={(e) => handleProfilePicChange(e.target.files[0])}
+                        />
+                    </div>
+
+                    {/* Username */}
+                    <div className="username-container mt-3">
+                        <h4 className="profile-username">{formData.userName}</h4>
+                    </div>
+
+                    {/* Streak Circles */}
+                    <div className="streak-container mt-3 d-flex justify-content-center gap-3">
+                        <div className="streak-circle" title="Max Streak"></div>
+                        <div className="streak-circle" title="Current Streak"></div>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="profile-button-container mt-3">
                         <Button
-                            onClick={handleSave}
-                            style={{
-                                width: "100%",
-                                marginTop: "10px",
-                                border: "none"
-                            }}
-                            variant="success"
+                            className="profile-form-button me-2"
+                            onClick={() => fileInputRef.current.click()}
                         >
-                            {saving ? "Saving..." : editing ? "Save" : "Edit"}
+                            Change Profile Pic
                         </Button>
-                    </Form>
+                        <Button
+                            className="profile-form-button"
+                            onClick={handleUsernameChange}
+                        >
+                            Change Username
+                        </Button>
+                    </div>
                 </Card.Body>
             </Card>
         </div>
