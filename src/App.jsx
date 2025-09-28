@@ -1,18 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
-import Register from './pages/Register';
-import NotLoggedIn from './pages/NotLoggedIn';
-import Unauthorized from './pages/Unauthorized';
-import ProtectedLayout from './components/ProtectedLayout';
-import Dashboard from './pages/Dashboard';
-import EditProfile from './pages/EditProfile';
-import Home from './pages/Home';
-import Learn from './pages/Learn';
-import ActivityTracker from './components/ActivityTracker'; // <-- import tracker
-import { useAuth } from './contexts/AuthContext';
+import Login from './pages/Login'
+import NotFound from './pages/NotFound'
+import Register from './pages/Register'
+import NotLoggedIn from './pages/NotLoggedIn'
+import Unauthorized from './pages/Unauthorized'
+import ProtectedLayout from './components/ProtectedLayout'
+import Dashboard from './pages/Dashboard'
+import EditProfile from './pages/EditProfile'
+import Home from './pages/Home'
+import Learn from './pages/Learn'
 
 export default function App() {
     const { currentUser } = useAuth();
@@ -32,9 +30,9 @@ export default function App() {
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
                 <Route element={<ProtectedLayout />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/learn" element={<Learn />} />
-                    <Route path="/edit-profile" element={<EditProfile />} />
+                   <Route path="/dashboard" element={<Dashboard />} />
+                   <Route path="/learn" element={<Learn />}/>
+                   <Route path="/edit-profile" element={<EditProfile />} />
                 </Route>
             </Routes>
         </BrowserRouter>
