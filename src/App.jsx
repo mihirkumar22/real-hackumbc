@@ -1,5 +1,5 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
@@ -11,14 +11,22 @@ import Dashboard from './pages/Dashboard'
 import EditProfile from './pages/EditProfile'
 import Home from './pages/Home'
 import Learn from './pages/Learn'
-import Lesson from './pages/Lesson'
+import ActivityTracker from './components/ActivityTracker';
+
+import { useAuth } from './contexts/AuthContext';
+
 
 export default function App() {
+    const { currentUser } = useAuth();
+
     return (
         <BrowserRouter>
+            {/* Run ActivityTracker only if user is logged in */}
+            {currentUser && <ActivityTracker />}
+
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/home" element={<Home /> } />
+                <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/not-logged-in" element={<NotLoggedIn />} />
@@ -28,11 +36,9 @@ export default function App() {
                 <Route element={<ProtectedLayout />}>
                    <Route path="/dashboard" element={<Dashboard />} />
                    <Route path="/learn" element={<Learn />}/>
-                   <Route path="/lesson" element = {<Lesson />} />
                    <Route path="/edit-profile" element={<EditProfile />} />
                 </Route>
-
             </Routes>
         </BrowserRouter>
-    )
+    );
 }

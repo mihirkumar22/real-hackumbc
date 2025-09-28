@@ -6,7 +6,7 @@ import {
     signOut
 } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AuthContext = createContext();
@@ -24,7 +24,6 @@ export function AuthProvider({ children }) {
             setCurrentUser(user);
             setLoading(false);
         });
-
         return unsubscribe;
     }, []);
 
@@ -42,7 +41,8 @@ export function AuthProvider({ children }) {
                 lessonsCompleted: [],
                 lessonsAvailable: ["1-1"],
                 userName: "",
-                profilePic: ""
+                profilePic: "",
+                dailyTimeSpent: {} // <-- initialize daily time tracking
             };
             await setDoc(userDocRef, userData);
 
@@ -107,12 +107,33 @@ export function AuthProvider({ children }) {
         }
     }
 
+    // Record daily time spent on site (minutes)
+    async function recordDailyTime(userId, minutes) {
+        try {
+            const userRef = doc(db, "users", userId);
+            const docSnap = await getDoc(userRef);
+            if (!docSnap.exists()) return;
+
+            const data = docSnap.data();
+            const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+            const dailyTime = data.dailyTimeSpent || {};
+            const currentMinutes = dailyTime[today] || 0;
+
+            dailyTime[today] = currentMinutes + minutes;
+
+            await updateDoc(userRef, { dailyTimeSpent: dailyTime });
+        } catch (err) {
+            console.error("Failed to record daily time:", err);
+        }
+    }
+
     const value = {
         currentUser,
         register,
         login,
         logout,
-        updateUserProfile
+        updateUserProfile,
+        recordDailyTime
     };
 
     return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;

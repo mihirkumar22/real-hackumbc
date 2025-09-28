@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from './AuthContext';
 
@@ -20,24 +20,46 @@ export function UserProvider({ children }) {
         async function setupListener() {
             if (currentUser) {
                 const userDocRef = doc(db, 'users', currentUser.uid);
-                
+
                 const docSnapshot = await getDoc(userDocRef);
 
                 if (docSnapshot.exists()) {
+                    // Initialize streak fields if they don't exist
+                    const data = docSnapshot.data();
+                    const initializedData = {
+                        ...data,
+                        maxStreak: data.maxStreak ?? 0,
+                        currentStreak: data.currentStreak ?? 0
+                    };
+
                     unsubscribe = onSnapshot(userDocRef, (snapshot) => {
                         if (snapshot.exists()) {
-                            setUserData(snapshot.data());
+                            const snapshotData = snapshot.data();
+                            setUserData({
+                                ...snapshotData,
+                                maxStreak: snapshotData.maxStreak ?? 0,
+                                currentStreak: snapshotData.currentStreak ?? 0
+                            });
                         } else {
-                            console.error('no user document found');
+                            console.error('No user document found');
                             setUserData(null);
                         }
                         setLoading(false);
-                    })
+                    });
+
+                    // Optionally write initial streak values to Firestore if they were missing
+                    if (data.maxStreak === undefined || data.currentStreak === undefined) {
+                        await updateDoc(userDocRef, {
+                            maxStreak: initializedData.maxStreak,
+                            currentStreak: initializedData.currentStreak
+                        });
+                    }
+
                 } else {
                     setUserData(null);
                     setLoading(false);
                 }
-                
+
             } else {
                 setUserData(null);
                 setLoading(false);
@@ -47,15 +69,15 @@ export function UserProvider({ children }) {
         setupListener();
 
         return () => unsubscribe && unsubscribe();
-    }, [currentUser])
+    }, [currentUser]);
 
     async function updateUserData(updates) {
         try {
             const userDocRef = doc(db, 'users', currentUser.uid);
             await updateDoc(userDocRef, updates);
         } catch (error) {
-            console.error("failed to update user data", error);
-            throw new Error('Could not update user data. Please try again later')
+            console.error("Failed to update user data", error);
+            throw new Error('Could not update user data. Please try again later');
         }
     }
 
@@ -63,11 +85,11 @@ export function UserProvider({ children }) {
         userData,
         loading,
         updateUserData,
-    }
+    };
 
     return (
         <UserContext.Provider value={value}>
             {!loading && children}
         </UserContext.Provider>
-    )
+    );
 }
