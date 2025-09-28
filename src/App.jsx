@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard'
 import EditProfile from './pages/EditProfile'
 import Home from './pages/Home'
 import Learn from './pages/Learn'
+import Lesson from './pages/Lesson'
 
 export default function App() {
     return (
@@ -27,6 +28,7 @@ export default function App() {
                 <Route element={<ProtectedLayout />}>
                    <Route path="/dashboard" element={<Dashboard />} />
                    <Route path="/learn" element={<Learn />}/>
+                   <Route path="/lesson" element = {<Lesson />} />
                    <Route path="/edit-profile" element={<EditProfile />} />
                 </Route>
 
