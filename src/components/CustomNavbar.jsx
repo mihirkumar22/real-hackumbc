@@ -56,6 +56,15 @@ function CustomNavbar() {
                     <span className="nav-icon">👤</span>
                     <span className="nav-text">Profile</span>
                 </Link>
+
+                <Link 
+                    to="/social" 
+                    className={`nav-link ${location.pathname === '/social' ? 'active' : ''}`}
+                >
+                    <span className="nav-icon">💬</span>
+                    <span className="nav-text">Social</span>
+                </Link>
+
             </div>
 
             {/* User Info & Logout */}

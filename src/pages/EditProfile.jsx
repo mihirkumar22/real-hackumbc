@@ -50,6 +50,10 @@ function EditProfile() {
         }
     };
 
+    // Extract streak data
+    const currentStreak = userData?.currentStreak || 0;
+    const maxStreak = userData?.maxStreak || 0;
+
     return (
         <div className="profile-container">
             <CustomNavbar />
@@ -79,9 +83,14 @@ function EditProfile() {
 
                     {/* Streak Circles */}
                     <div className="streak-container mt-3 d-flex justify-content-center gap-3">
-                        <div className="streak-circle" title="Max Streak"></div>
-                        <div className="streak-circle" title="Current Streak"></div>
+                        <div className="streak-circle max-streak" title="Max Streak">
+                            {userData?.maxStreak || 0}
+                        </div>
+                        <div className="streak-circle current-streak" title="Current Streak">
+                            {userData?.currentStreak || 0}
+                        </div>
                     </div>
+
 
                     {/* Buttons */}
                     <div className="profile-button-container mt-3">
