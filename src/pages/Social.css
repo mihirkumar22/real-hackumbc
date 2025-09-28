@@ -67,49 +67,37 @@
     text-align: center;
 }
 
-.friend-list {
-    border: 2px solid black;
-    padding: 5px 10px;
-    border-radius: 10px;
-}
-
-/* Friend list row */
 .friend-item {
-  padding: 10px 15px;
-}
-
-.friend-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
 }
 
-/* Profile pic */
-.friend-pfp {
-  width: 45px;
-  height: 45px;
-  object-fit: cover;
-  border: 2px solid #ccc;
+.friend-pic {
+  width: 50px;
+  height: 50px;
 }
 
-/* Friend name */
 .friend-name {
-  flex-grow: 1;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
+  font-weight: bold;
+  flex: 1;
 }
 
-/* Streaks */
 .friend-streaks {
   display: flex;
-  gap: 8px;
+  gap: 5px;
 }
 
 .streak-circle {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  border: 2px solid #ff9800;
-  background-color: transparent;
+}
+
+.streak-circle.max {
+  background-color: gold;
+}
+
+.streak-circle.current {
+  background-color: green;
 }
