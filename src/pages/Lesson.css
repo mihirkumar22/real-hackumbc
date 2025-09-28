@@ -1,0 +1,117 @@
+/* Lesson Page Mobile Responsive Styles */
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .progress-bars-container {
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+        padding: 20px !important;
+        gap: 6px !important;
+    }
+    
+    .answer-options-container {
+        flex-direction: column !important;
+        width: 90% !important;
+        gap: 8px !important;
+    }
+    
+    .answer-options-container button {
+        width: 100%;
+        min-width: auto !important;
+        padding: 12px 16px !important;
+        font-size: 16px !important;
+    }
+    
+    /* Sign image responsive */
+    .lesson-sign-image {
+        height: 150px !important;
+        margin-bottom: 24px !important;
+    }
+    
+    /* Question title responsive */
+    .lesson-question-title {
+        font-size: 24px !important;
+        margin-bottom: 24px !important;
+        text-align: center;
+        padding: 0 20px;
+    }
+    
+    /* Close button positioning */
+    .lesson-close-btn {
+        top: 10px !important;
+        right: 10px !important;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 16px !important;
+    }
+    
+    /* Bottom bar responsive */
+    .lesson-bottom-bar {
+        padding: 16px !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    .lesson-bottom-bar button {
+        width: 100%;
+        padding: 12px 24px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .progress-bars-container {
+        margin-left: 2% !important;
+        margin-right: 2% !important;
+        padding: 16px !important;
+        gap: 4px !important;
+    }
+    
+    .answer-options-container {
+        width: 95% !important;
+        gap: 6px !important;
+    }
+    
+    .lesson-sign-image {
+        height: 120px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .lesson-question-title {
+        font-size: 20px !important;
+        margin-bottom: 20px !important;
+        padding: 0 15px;
+    }
+    
+    .lesson-close-btn {
+        top: 8px !important;
+        right: 8px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 14px !important;
+    }
+    
+    .lesson-bottom-bar {
+        padding: 12px !important;
+        gap: 8px !important;
+    }
+    
+    .lesson-bottom-bar button {
+        padding: 10px 20px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* Success animation responsive */
+@media (max-width: 768px) {
+    .success-animation-overlay dotlottie-wc {
+        width: 250px !important;
+        height: 250px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .success-animation-overlay dotlottie-wc {
+        width: 200px !important;
+        height: 200px !important;
+    }
+}

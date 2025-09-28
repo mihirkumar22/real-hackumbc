@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useUserContext } from '../contexts/UserContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -8,28 +8,46 @@ function CustomNavbar() {
     const { userData } = useUserContext();
     const { logout } = useAuth();
     const location = useLocation();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     // Check if we're on the Learn page
     const isLearnPage = location.pathname === '/learn';
 
     return (
-        <nav className="sidebar">
-            {/* Logo */}
-            <div className="sidebar-logo">
-                {isLearnPage ? (
-                    // On Learn page, make logo unclickable
-                    <div className="logo-link" style={{ cursor: 'default', pointerEvents: 'none' }}>
-                        <div className="text-lg">🌱</div>
-                        <span className="text-sm font-bold">Beanstalk</span>
-                    </div>
-                ) : (
-                    // On other pages, keep it clickable
-                    <Link to="/" className="logo-link">
-                        <div className="text-lg">🌱</div>
-                        <span className="text-sm font-bold">Beanstalk</span>
-                    </Link>
-                )}
-            </div>
+        <>
+            {/* Mobile Menu Button */}
+            <button 
+                className="mobile-menu-btn"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+                ☰
+            </button>
+
+            {/* Mobile Overlay */}
+            {isMobileMenuOpen && (
+                <div 
+                    className="mobile-overlay"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                />
+            )}
+
+            <nav className={`sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+                {/* Logo */}
+                <div className="sidebar-logo">
+                    {isLearnPage ? (
+                        // On Learn page, make logo unclickable
+                        <div className="logo-link" style={{ cursor: 'default', pointerEvents: 'none' }}>
+                            <div className="text-lg">🌱</div>
+                            <span className="text-sm font-bold">Beanstalk</span>
+                        </div>
+                    ) : (
+                        // On other pages, keep it clickable
+                        <Link to="/" className="logo-link">
+                            <div className="text-lg">🌱</div>
+                            <span className="text-sm font-bold">Beanstalk</span>
+                        </Link>
+                    )}
+                </div>
 
             {/* Navigation Links */}
             <div className="sidebar-nav">
@@ -81,13 +99,17 @@ function CustomNavbar() {
                 
                 <button 
                     className="logout-btn"
-                    onClick={logout}
+                    onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                    }}
                 >
                     <span className="nav-icon">🚪</span>
                     <span className="nav-text">Logout</span>
                 </button>
             </div>
         </nav>
+        </>
     );
 }
 
