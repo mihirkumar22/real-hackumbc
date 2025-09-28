@@ -34,6 +34,8 @@ export function AuthProvider({ children }) {
                 uid: user.uid,
                 email: user.email,
                 createdAt: new Date().toISOString(),
+                lessonsCompleted: [],
+                lessonsAvailable: ["1-1"]
             }
             
 
