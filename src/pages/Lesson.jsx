@@ -268,6 +268,9 @@ export default function Lesson() {
                     </>
                 ) : (
                     <>
+                        <h2 style={{ fontSize: "32px", fontWeight: "bold", marginBottom: "32px" }}>
+                            Sign the following letter: {correctAnswer}
+                        </h2>
 
                     </>
                 )}
