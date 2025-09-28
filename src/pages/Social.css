@@ -88,16 +88,54 @@
   gap: 5px;
 }
 
+.social-form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0px 130px;
+  margin-bottom: 15px;
+}
+.social-button {
+  background-color: #499f69;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 5px;
+}
+
 .streak-circle {
   width: 15px;
   height: 15px;
   border-radius: 50%;
 }
 
+.friend-item {
+  display: flex;
+  align-items: center;
+}
+
+.friend-pic {
+  width: 50px;
+  height: 50px;
+}
+
+.friend-streaks .streak-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
 .streak-circle.max {
-  background-color: gold;
+  background-color: #ff9800;
 }
 
 .streak-circle.current {
-  background-color: green;
+  background-color: #4caf50;
 }
+

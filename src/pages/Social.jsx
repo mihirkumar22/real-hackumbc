@@ -17,9 +17,8 @@ export default function Social() {
   const [friendsList, setFriendsList] = useState([]);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
-  const [friendDetails, setFriendDetails] = useState({}); // Map UID -> { name, profilePic, streaks }
+  const [friendDetails, setFriendDetails] = useState({});
 
-  // Load friends list from userData
   useEffect(() => {
     if (userData?.friends) {
       setFriendsList(userData.friends);
@@ -30,7 +29,6 @@ export default function Social() {
     }
   }, [userData]);
 
-  // Fetch friend details by UID
   async function fetchFriendDetails(friendUids) {
     const details = {};
     for (const uid of friendUids) {
@@ -49,18 +47,14 @@ export default function Social() {
     setFriendDetails(details);
   }
 
-  // Add friend by email and send EmailJS invite
   async function handleAddFriend() {
     setMessage(null);
     setError(null);
-
     if (!emailInput) {
       setError("Please enter an email.");
       return;
     }
-
     try {
-      // Query user by email
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("email", "==", emailInput));
       const querySnapshot = await getDocs(q);
@@ -84,7 +78,6 @@ export default function Social() {
         return;
       }
 
-      // Update current user's friends
       const newFriends = [...friendsList, friendUid];
       await updateUserData({ friends: newFriends });
       setFriendsList(newFriends);
@@ -98,7 +91,6 @@ export default function Social() {
         },
       }));
 
-      // Update friend's friend list
       const friendRef = doc(db, "users", friendUid);
       const friendDocSnap = await getDoc(friendRef);
       if (friendDocSnap.exists()) {
@@ -108,18 +100,15 @@ export default function Social() {
         }
       }
 
-      // Send EmailJS invite
+      // EmailJS invite
       emailjs
         .send(
           "service_xq5ji2p",
           "template_tu2xzkj",
-          {
-            to_email: friendData.email,
-            from_name: userData.userName || currentUser.email,
-          },
+          { to_email: friendData.email, from_name: userData.userName || currentUser.email },
           "Gs_Z9j0cHQFV_1H_m"
         )
-        .then(() => console.log("Email sent successfully"))
+        .then(() => console.log("Email sent"))
         .catch((err) => console.error("EmailJS error:", err));
 
       setMessage(`Friend added successfully: ${friendData.userName || friendData.email}`);
@@ -136,11 +125,10 @@ export default function Social() {
       <Card className="social-card">
         <Card.Body>
           <h3>Your Friends</h3>
-
           {message && <Alert variant="success">{message}</Alert>}
           {error && <Alert variant="danger">{error}</Alert>}
 
-          <Form className="mb-3">
+          <Form className="social-form">
             <Form.Control
               className="social-input"
               type="email"
@@ -148,7 +136,7 @@ export default function Social() {
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
             />
-            <Button className="mt-2" variant="success" onClick={handleAddFriend}>
+            <Button className="social-button" variant="success" onClick={handleAddFriend}>
               Add Friend
             </Button>
           </Form>
@@ -158,12 +146,14 @@ export default function Social() {
             {friendsList.map((uid) => {
               const details = friendDetails[uid];
               return details ? (
-                <ListGroup.Item key={uid} className="friend-item">
-                  <Image src={details.profilePic} roundedCircle className="friend-pic" />
-                  <span className="friend-name">{details.name}</span>
-                  <div className="friend-streaks">
-                    <div className="streak-circle max" title="Max Streak"></div>
-                    <div className="streak-circle current" title="Current Streak"></div>
+                <ListGroup.Item key={uid} className="friend-item d-flex align-items-center justify-content-between">
+                  <div className="d-flex align-items-center">
+                    <Image src={details.profilePic} roundedCircle className="friend-pic" />
+                    <span className="friend-name ms-3">{details.name}</span>
+                  </div>
+                  <div className="friend-streaks d-flex gap-2">
+                    <div className="streak-circle max" title="Max Streak">{details.maxStreak}</div>
+                    <div className="streak-circle current" title="Current Streak">{details.currentStreak}</div>
                   </div>
                 </ListGroup.Item>
               ) : null;
